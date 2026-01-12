@@ -1,420 +1,440 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="rtl" class="scroll-smooth">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEXORA - Innovation & Digital Solutions</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Inter:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary: #1e3a8a;
-            --secondary: #3b82f6;
-        }
-        body {
-            font-family: 'Cairo', 'Inter', sans-serif;
-            scroll-behavior: smooth;
-            transition: background-color 0.3s;
-        }
-        .hero-gradient {
-            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
-        }
-        .whatsapp-float {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            z-index: 100;
-            animation: pulse 2s infinite;
-        }
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
-            70% { box-shadow: 0 0 0 15px rgba(34, 197, 94, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
-        }
-        [data-i18n] {
-            transition: opacity 0.2s ease-in-out;
-        }
-        .social-hover:hover {
-            transform: scale(1.1);
-            color: #3b82f6;
-        }
-        /* مباعدة أسطر العنوان الرئيسي لضمان وضوح الأحرف العربية */
-        .main-title {
-            line-height: 1.8 !important;
-            padding-bottom: 0.5rem;
-        }
-        /* تحسين مظهر حاوية صورة الهيرو */
-        .hero-image-container {
-            position: relative;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            border-radius: 2rem;
-            overflow: hidden;
-            border: 4px solid rgba(255, 255, 255, 0.1);
-            background-color: #1e293b;
-            min-height: 300px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        /* تصميم شعار احتياطي كبير في حال فشل تحميل الصورة */
-        .logo-fallback {
-            display: none;
-            font-weight: 900;
-            color: #1e3a8a;
-            font-style: italic;
-            font-size: 2rem; /* زيادة الحجم هنا */
-            letter-spacing: -1px;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- تحسين محركات البحث SEO -->
+  <title>NEXORA | نكسورا للحلول الرقمية المتكاملة</title>
+  <meta name="description" content="نكسورا (NEXORA) شركة خدمات متكاملة تقدم حلولاً احترافية مصممة لدعم النمو المستدام وبناء نماذج عمل كفؤة." />
+  <meta name="keywords" content="برمجة, تسويق رقمي, نكسورا, حلول برمجية, سوريا, دمشق, استشارات أعمال, Nexora" />
+  <meta name="robots" content="index,follow" />
+  <meta name="theme-color" content="#0f172a" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="NEXORA" />
+  <meta property="og:title" content="NEXORA | Integrated Digital & Business Solutions" />
+  <meta property="og:description" content="نبتكر لنرتقي بأعمالك عبر منظومة متكاملة من الحلول الذكية والاحترافية." />
+  <meta property="og:image" content="images/og-image.jpg" />
+  <meta property="og:url" content="https://nexora-syria.com" />
+
+  <!-- الخطوط والمكتبات الخارجية -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Inter:wght@400;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  
+  <style>
+    :root {
+      --primary: #0f172a;
+      --accent: #3b82f6;
+    }
+    body {
+      font-family: 'Cairo', 'Inter', sans-serif;
+      overflow-x: hidden;
+      background-color: #ffffff;
+    }
+    .hero-mesh {
+      background-color: #0f172a;
+      background-image: radial-gradient(at 0% 0%, hsla(223,84%,15%,1) 0, transparent 50%), 
+                        radial-gradient(at 50% 0%, hsla(217,91%,21%,1) 0, transparent 50%), 
+                        radial-gradient(at 100% 0%, hsla(201,100%,36%,1) 0, transparent 50%);
+    }
+    .glass-card {
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .hover-lift { transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
+    .hover-lift:hover { transform: translateY(-10px); }
+    
+    .whatsapp-pulse {
+      position: fixed;
+      bottom: 25px;
+      right: 25px;
+      z-index: 100;
+      animation: pulse-ring 1.5s infinite;
+    }
+    @keyframes pulse-ring {
+      0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4); }
+      70% { box-shadow: 0 0 0 20px rgba(34, 197, 94, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+    }
+    
+    .about-gradient {
+        background: linear-gradient(to bottom, #ffffff, #f8fafc);
+    }
+    .value-card {
+        border-right: 4px solid #3b82f6;
+        padding-right: 1.5rem;
+    }
+    [dir="ltr"] .value-card {
+        border-right: none;
+        border-left: 4px solid #3b82f6;
+        padding-right: 0;
+        padding-left: 1.5rem;
+    }
+
+    /* ضبط محاذاة النص الاحترافية */
+    .text-justify-custom {
+      text-align: justify;
+      text-justify: inter-word;
+    }
+
+    html:not(.aos-init) [data-aos] {
+      opacity: 1 !important;
+      transform: none !important;
+      visibility: visible !important;
+    }
+  </style>
 </head>
-<body class="bg-slate-50 text-slate-900">
+<body class="bg-white text-slate-900 selection:bg-blue-100 selection:text-blue-900">
 
-    <!-- Floating WhatsApp Button -->
-    <a href="https://wa.me/963988893928?text=Hello%20Nexora" target="_blank" class="whatsapp-float bg-green-500 text-white p-4 rounded-full shadow-2xl flex items-center justify-center hover:bg-green-600 transition-colors">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.438 9.889-9.886.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
-        </svg>
-    </a>
+  <!-- زر واتساب العائم -->
+  <a href="https://wa.me/963988893928" target="_blank" class="whatsapp-pulse bg-green-500 text-white p-4 rounded-full shadow-2xl flex items-center justify-center hover:scale-110 transition-transform">
+    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.438 9.889-9.886.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+  </a>
 
-    <!-- Navigation -->
-    <header class="bg-white/95 backdrop-blur-md shadow-sm sticky top-0 z-50">
-        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <a href="#home" class="flex items-center gap-3">
-                <div class="flex items-center">
-                    <!-- تكبير حجم الشعار هنا من h-10 إلى h-20 -->
-                    <img id="mainLogo" src="Untitled-3-01.jpg" alt="NEXORA" class="h-20 w-auto transition-all" 
-                         onerror="this.style.display='none'; document.getElementById('logoText').style.display='block';">
-                    <span id="logoText" class="logo-fallback">NEXORA</span>
+  <!-- القائمة العلوية -->
+  <header class="bg-white/90 backdrop-blur-md border-b sticky top-0 z-50">
+    <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+      <a href="#home" class="flex items-center gap-3 group">
+        <img src="images/logo.png" alt="Logo" class="w-12 h-12 rounded-xl shadow-lg" onerror="this.src='https://via.placeholder.com/60/0f172a/ffffff?text=N'">
+        <span class="text-2xl font-black text-slate-800 uppercase tracking-tighter">NEXORA</span>
+      </a>
+
+      <div class="hidden lg:flex items-center space-x-reverse space-x-8 font-bold text-slate-600">
+        <a href="#home" data-i18n="nav-home" class="hover:text-blue-600 transition">الرئيسية</a>
+        <a href="#about" data-i18n="nav-about" class="hover:text-blue-600 transition">من نحن</a>
+        <a href="#services" data-i18n="nav-services" class="hover:text-blue-600 transition">خدماتنا</a>
+        <a href="#portfolio" data-i18n="nav-portfolio" class="hover:text-blue-600 transition">أعمالنا</a>
+        <a href="#contact" data-i18n="nav-contact" class="hover:text-blue-600 transition">اتصل بنا</a>
+      </div>
+
+      <div class="flex items-center gap-4">
+        <select id="langSwitcher" onchange="changeLanguage(this.value)" class="bg-slate-100 border-none rounded-lg px-2 py-2 text-xs font-bold outline-none cursor-pointer">
+          <option value="ar">العربية</option>
+          <option value="en">English</option>
+        </select>
+        <a href="#contact" data-i18n="nav-cta" class="bg-blue-600 text-white px-5 py-2.5 rounded-xl font-bold hover:bg-blue-700 transition hidden sm:block shadow-lg">ابدأ مشروعك</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <!-- قسم الترحيب (Hero) -->
+    <section id="home" class="hero-mesh text-white py-24 lg:py-40 px-6 relative overflow-hidden">
+      <div class="container mx-auto flex flex-col lg:flex-row items-center gap-16">
+        <div class="lg:w-3/5 text-center lg:text-right" data-aos="fade-left">
+          <h1 class="text-5xl lg:text-7xl font-black mb-8 leading-[1.2]" data-i18n="hero-title">نبتكر <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300">حلول الغد</span> اليوم</h1>
+          <p class="text-xl lg:text-2xl mb-12 opacity-80 max-w-3xl" data-i18n="hero-desc">شريككم التقني لتطوير برمجيات استثنائية، بناء هويات تجارية قوية، واستراتيجيات تسويقية تضمن لك الصدارة في السوق العالمي.</p>
+          <div class="flex flex-wrap justify-center lg:justify-start gap-5">
+            <a href="#portfolio" data-i18n="btn-start" class="bg-white text-blue-900 px-10 py-5 rounded-2xl font-black hover:scale-105 transition-transform shadow-2xl">مشاهدة أعمالنا</a>
+            <a href="#about" data-i18n="btn-about" class="bg-blue-800/40 backdrop-blur-md border border-white/20 px-10 py-5 rounded-2xl font-black hover:bg-blue-700 transition text-white">اكتشف من نحن</a>
+          </div>
+        </div>
+        <div class="lg:w-2/5" data-aos="zoom-in">
+          <div class="glass-card p-4 rounded-[2.5rem] shadow-2xl">
+            <img src="images/hero-main.jpg" alt="Innovation" class="rounded-[2rem] w-full" onerror="this.src='https://via.placeholder.com/800x600/1e293b/ffffff?text=Innovation'">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- قسم من نحن (About Us) -->
+    <section id="about" class="py-32 about-gradient overflow-hidden">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+                <div data-aos="fade-left">
+                    <div class="inline-block px-4 py-2 bg-blue-50 text-blue-600 rounded-lg font-bold text-sm mb-6 tracking-widest uppercase" data-i18n="about-tag">من نحن</div>
+                    <!-- ترويسة محدثة: تبدأ من اليسار، خط أكبر، متناسبة مع عرض النص -->
+                    <h2 class="text-4xl lg:text-6xl font-black text-slate-900 mb-8 leading-tight text-left ltr border-l-4 border-blue-600 pl-4">NEXORA</h2>
+                    
+                    <div class="text-justify-custom text-lg text-slate-600 leading-[1.8] space-y-6">
+                        <p data-i18n="about-intro">نيكسورا (NEXORA) هي شركة خدمات متكاملة تقدّم حلولًا احترافية مصمّمة لدعم الأفراد والشركات في تحقيق النمو المستدام وبناء نماذج عمل أكثر كفاءة ومرونة.</p>
+                        <p data-i18n="about-philosophy">نؤمن بأن القيمة الحقيقية لا تتحقق من خلال خدمة واحدة، بل من خلال منظومة متكاملة من الحلول الذكية التي تنطلق من فهم دقيق للاحتياجات، وتُبنى على تخطيط منهجي، وتُنفَّذ وفق أعلى المعايير المهنية.</p>
+                        <p data-i18n="about-range">نغطي في نيكسورا مجموعة واسعة من الخدمات تشمل الاستشارات المتخصصة، الحلول التقنية، الخدمات الإدارية والتنظيمية، والتكامل المؤسسي، بما يضمن لعملائنا تجربة متماسكة ونتائج قابلة للقياس.</p>
+                    </div>
                 </div>
+                <div class="relative" data-aos="fade-right">
+                    <div class="absolute -top-10 -right-10 w-64 h-64 bg-blue-200/30 blur-3xl rounded-full"></div>
+                    <div class="relative rounded-[3rem] overflow-hidden shadow-2xl border-8 border-white">
+                        <img src="images/about-main.jpg" alt="About Nexora" class="w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/800x1000/3b82f6/ffffff?text=About+Nexora'">
+                    </div>
+                </div>
+            </div>
+
+            <!-- الرؤية والرسالة -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10 mt-32">
+                <div class="bg-white p-12 rounded-[2.5rem] shadow-sm border border-slate-100 hover:shadow-xl transition-all" data-aos="fade-up">
+                    <h4 class="text-3xl font-black text-slate-900 mb-6 flex items-center gap-4"><span class="w-2 h-10 bg-blue-600 rounded-full"></span><span data-i18n="vision-title">رؤيتنا</span></h4>
+                    <p class="text-lg text-slate-500 leading-relaxed text-justify-custom" data-i18n="vision-text">أن نكون الشريك الاستراتيجي الموثوق الذي يعتمد عليه عملاؤنا في تطوير أعمالهم، وتحويل التحديات إلى فرص حقيقية للنمو والتوسّع.</p>
+                </div>
+                <div class="bg-white p-12 rounded-[2.5rem] shadow-sm border border-slate-100 hover:shadow-xl transition-all" data-aos="fade-up" data-aos-delay="100">
+                    <h4 class="text-3xl font-black text-slate-900 mb-6 flex items-center gap-4"><span class="w-2 h-10 bg-indigo-600 rounded-full"></span><span data-i18n="mission-title">رسالتنا</span></h4>
+                    <p class="text-lg text-slate-500 leading-relaxed text-justify-custom" data-i18n="mission-text">تقديم حلول متكاملة تجمع بين الاحترافية، الابتكار، والموثوقية، مع الالتزام بأعلى معايير الجودة والشفافية.</p>
+                </div>
+            </div>
+
+            <!-- قيمنا -->
+            <div class="mt-32">
+                <div class="text-center mb-16" data-aos="fade-up">
+                    <h2 class="text-4xl font-black text-slate-900 mb-4" data-i18n="values-title">قيمنا الجوهرية</h2>
+                    <p class="text-slate-500 font-bold" data-i18n="values-subtitle">القواعد التي نرتكز عليها في كل خطوة</p>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border-r-4 border-blue-600 value-card font-bold text-slate-800" data-aos="zoom-in" data-i18n="val-1">الاحترافية في الأداء</div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border-r-4 border-blue-600 value-card font-bold text-slate-800" data-aos="zoom-in" data-aos-delay="50" data-i18n="val-2">الدقة في التخطيط والتنفيذ</div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border-r-4 border-blue-600 value-card font-bold text-slate-800" data-aos="zoom-in" data-aos-delay="100" data-i18n="val-3">الابتكار في الحلول</div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border-r-4 border-blue-600 value-card font-bold text-slate-800" data-aos="zoom-in" data-aos-delay="150" data-i18n="val-4">الشفافية وبناء الثقة</div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border-r-4 border-blue-600 value-card font-bold text-slate-800" data-aos="zoom-in" data-aos-delay="200" data-i18n="val-5">الشراكة طويلة الأمد</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- الإحصائيات -->
+    <section class="py-20 bg-slate-900 text-white">
+      <div class="container mx-auto px-6">
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-10">
+          <div class="text-center" data-aos="fade-up">
+            <div class="text-5xl font-black text-blue-400 mb-2">+150</div>
+            <div class="text-slate-400 font-bold uppercase text-sm" data-i18n="stat-1">مشروع منجز</div>
+          </div>
+          <div class="text-center" data-aos="fade-up" data-aos-delay="100">
+            <div class="text-5xl font-black text-blue-400 mb-2">+10</div>
+            <div class="text-slate-400 font-bold uppercase text-sm" data-i18n="stat-2">سنوات خبرة</div>
+          </div>
+          <div class="text-center" data-aos="fade-up" data-aos-delay="200">
+            <div class="text-5xl font-black text-blue-400 mb-2">+98%</div>
+            <div class="text-slate-400 font-bold uppercase text-sm" data-i18n="stat-3">رضا العملاء</div>
+          </div>
+          <div class="text-center" data-aos="fade-up" data-aos-delay="300">
+            <div class="text-5xl font-black text-blue-400 mb-2">+40</div>
+            <div class="text-slate-400 font-bold uppercase text-sm" data-i18n="stat-4">خبير تقني</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- الخدمات -->
+    <section id="services" class="py-32 bg-slate-50">
+      <div class="container mx-auto px-6 text-center">
+        <h2 class="text-4xl lg:text-5xl font-black text-slate-900 mb-6" data-i18n="services-title">خدماتنا المتميزة</h2>
+        <p class="text-slate-500 text-lg max-w-2xl mx-auto mb-20" data-i18n="services-subtitle">منظومة متكاملة من الحلول الذكية المصممة لتعزيز كفاءة ومرونة أعمالكم.</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+          <div class="bg-white p-10 rounded-[2.5rem] shadow-sm hover:shadow-2xl transition-all group text-right" data-aos="fade-up">
+            <div class="w-16 h-16 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+              <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+            </div>
+            <h4 class="text-2xl font-black mb-4" data-i18n="s1-t">الحلول التقنية</h4>
+            <p class="text-slate-500 leading-relaxed text-justify-custom" data-i18n="s1-d">تطوير البرمجيات المخصصة، الأنظمة السحابية، وتطبيقات الجوال بأحدث التقنيات العالمية.</p>
+          </div>
+          <div class="bg-white p-10 rounded-[2.5rem] shadow-sm hover:shadow-2xl transition-all group text-right" data-aos="fade-up" data-aos-delay="100">
+            <div class="w-16 h-16 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-indigo-600 group-hover:text-white transition-colors">
+              <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zM17 19v-2a2 2 0 00-2-2h-2a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2zM9 9h6v10H9V9z"></path></svg>
+            </div>
+            <h4 class="text-2xl font-black mb-4" data-i18n="s2-t">الاستشارات الإدارية</h4>
+            <p class="text-slate-500 leading-relaxed text-justify-custom" data-i18n="s2-d">دراسات الجدوى، التنظيم المؤسسي، وتطوير استراتيجيات النمو المستدام للشركات.</p>
+          </div>
+          <div class="bg-white p-10 rounded-[2.5rem] shadow-sm hover:shadow-2xl transition-all group text-right" data-aos="fade-up" data-aos-delay="200">
+            <div class="w-16 h-16 bg-purple-50 text-purple-600 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-purple-600 group-hover:text-white transition-colors">
+              <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+            </div>
+            <h4 class="text-2xl font-black mb-4" data-i18n="s3-t">الابتكار والأتمتة</h4>
+            <p class="text-slate-500 leading-relaxed text-justify-custom" data-i18n="s3-d">دمج حلول الذكاء الاصطناعي وأتمتة العمليات لتقليل التكاليف وزيادة الإنتاجية.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- معرض الأعمال -->
+    <section id="portfolio" class="py-32 bg-white">
+      <div class="container mx-auto px-6">
+        <h2 class="text-4xl lg:text-5xl font-black text-slate-900 mb-16 text-center" data-i18n="portfolio-title">معرض الأعمال</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 text-right">
+          <div class="relative group overflow-hidden rounded-[2.5rem] h-[450px] shadow-lg" data-aos="fade-up">
+            <img src="images/project-ecommerce.jpg" alt="Ecommerce" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" onerror="this.src='https://via.placeholder.com/600x800/3b82f6/ffffff?text=Ecommerce'">
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent opacity-90"></div>
+            <div class="absolute bottom-0 p-10 text-white">
+              <h4 class="text-2xl font-black mb-2">NexStore</h4>
+              <p class="text-slate-300 text-sm mb-6" data-i18n="p1-desc">منصة تجارة إلكترونية متطورة بنظام ذكاء اصطناعي.</p>
+              <a href="#contact" class="bg-white/20 backdrop-blur-md px-6 py-2 rounded-xl text-sm font-bold border border-white/20 hover:bg-white hover:text-blue-900 transition" data-i18n="btn-request-similar">طلب مشروع مشابه</a>
+            </div>
+          </div>
+          <div class="relative group overflow-hidden rounded-[2.5rem] h-[450px] shadow-lg" data-aos="fade-up" data-aos-delay="100">
+            <img src="images/project-fintech.jpg" alt="Fintech" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" onerror="this.src='https://via.placeholder.com/600x800/6366f1/ffffff?text=Fintech'">
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent opacity-90"></div>
+            <div class="absolute bottom-0 p-10 text-white">
+              <h4 class="text-2xl font-black mb-2">SmartPay</h4>
+              <p class="text-slate-300 text-sm mb-6" data-i18n="p2-desc">نظام دفع إلكتروني آمن ومشفر بأعلى المعايير.</p>
+              <a href="#contact" class="bg-white/20 backdrop-blur-md px-6 py-2 rounded-xl text-sm font-bold border border-white/20 hover:bg-white hover:text-blue-900 transition" data-i18n="btn-request-similar">طلب مشروع مشابه</a>
+            </div>
+          </div>
+          <div class="relative group overflow-hidden rounded-[2.5rem] h-[450px] shadow-lg" data-aos="fade-up" data-aos-delay="200">
+            <img src="images/project-saas.jpg" alt="SaaS" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" onerror="this.src='https://via.placeholder.com/600x800/a855f7/ffffff?text=SaaS'">
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent opacity-90"></div>
+            <div class="absolute bottom-0 p-10 text-white">
+              <h4 class="text-2xl font-black mb-2">NexDashboard</h4>
+              <p class="text-slate-300 text-sm mb-6" data-i18n="p3-desc">لوحة تحكم ذكية لإدارة الموارد البشرية والعمليات.</p>
+              <a href="#contact" class="bg-white/20 backdrop-blur-md px-6 py-2 rounded-xl text-sm font-bold border border-white/20 hover:bg-white hover:text-blue-900 transition" data-i18n="btn-request-similar">طلب مشروع مشابه</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- قسم التواصل -->
+    <section id="contact" class="py-32 bg-white relative overflow-hidden text-right">
+      <div class="container mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+        <div data-aos="fade-left">
+          <h2 class="text-5xl font-black mb-8 text-slate-900 leading-tight" data-i18n="contact-title">لنحول رؤيتك إلى <br><span class="text-blue-600">واقع رقمي</span></h2>
+          <p class="text-slate-500 text-lg mb-12" data-i18n="contact-desc">فريقنا جاهز للإجابة على كافة استفساراتكم. تواصلوا معنا عبر البريد أو واتساب مباشرة.</p>
+          <div class="space-y-6">
+            <div class="flex items-center gap-6 p-6 rounded-3xl bg-slate-50 group">
+              <div class="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-blue-600 shadow-sm group-hover:bg-blue-600 group-hover:text-white transition-all">
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"></path></svg>
+              </div>
+              <div>
+                <p class="text-slate-400 text-xs font-bold uppercase mb-1" data-i18n="c-mail-lbl">البريد الإلكتروني الرسمي</p>
+                <a href="mailto:administration@nexora-syria.com" class="text-xl font-bold text-slate-800 break-all">administration@nexora-syria.com</a>
+              </div>
+            </div>
+            <div class="flex items-center gap-6 p-6 rounded-3xl bg-slate-50 group">
+              <div class="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-green-600 shadow-sm group-hover:bg-green-600 group-hover:text-white transition-all">
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"></path></svg>
+              </div>
+              <div>
+                <p class="text-slate-400 text-xs font-bold uppercase mb-1" data-i18n="c-wa-lbl">الدعم عبر واتساب</p>
+                <a href="https://wa.me/963988893928" class="text-xl font-bold text-slate-800">00963988893928</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="bg-slate-900 p-10 lg:p-14 rounded-[3.5rem] shadow-2xl relative" data-aos="fade-right">
+          <form class="space-y-6" action="https://formspree.io/f/YOUR_ID" method="POST">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <input type="text" name="name" data-i18n-ph="ph-name" placeholder="الاسم الكامل" class="w-full bg-white/5 border border-white/10 p-4 rounded-2xl text-white outline-none focus:border-blue-500" required>
+              <input type="email" name="email" data-i18n-ph="ph-email" placeholder="البريد الإلكتروني" class="w-full bg-white/5 border border-white/10 p-4 rounded-2xl text-white outline-none focus:border-blue-500" required>
+            </div>
+            <textarea name="message" rows="5" data-i18n-ph="ph-msg" placeholder="كيف يمكننا مساعدتك؟" class="w-full bg-white/5 border border-white/10 p-4 rounded-2xl text-white outline-none focus:border-blue-500" required></textarea>
+            <button class="w-full bg-blue-600 text-white p-5 rounded-2xl font-black hover:bg-blue-700 transition-all transform hover:-translate-y-1" data-i18n="btn-send">أرسل الطلب الآن</button>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="bg-slate-50 border-t py-20 text-slate-600 text-center lg:text-right">
+    <div class="container mx-auto px-6 text-right">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+        <div class="md:col-span-2">
+          <div class="flex items-center justify-center lg:justify-start gap-3 mb-6">
+            <img src="images/logo.png" alt="Nexora" class="w-10 h-10 rounded-lg">
+            <span class="text-xl font-black text-slate-900 uppercase">NEXORA</span>
+          </div>
+          <p class="max-w-md leading-relaxed text-sm mx-auto lg:mx-0 text-justify-custom" data-i18n="footer-desc">بوابتكم للابتكار الرقمي والتحول الاستراتيجي. نجمع بين الخبرة التقنية العميقة والرؤية الإبداعية لخلق منتجات رقمية تفوق التوقعات.</p>
+        </div>
+        <div>
+          <h6 class="font-black text-slate-900 mb-6" data-i18n="f-links">روابط سريعة</h6>
+          <ul class="space-y-3 text-sm font-bold">
+            <li><a href="#home" class="hover:text-blue-600 transition">الرئيسية</a></li>
+            <li><a href="#about" class="hover:text-blue-600 transition">من نحن</a></li>
+            <li><a href="#services" class="hover:text-blue-600 transition">خدماتنا</a></li>
+          </ul>
+        </div>
+        <div>
+          <h6 class="font-black text-slate-900 mb-6" data-i18n="f-social">تابعنا</h6>
+          <div class="flex justify-center lg:justify-start gap-4">
+            <a href="https://facebook.com/Nexora6" target="_blank" class="w-10 h-10 rounded-full bg-white border flex items-center justify-center hover:bg-blue-600 hover:text-white transition shadow-sm">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c5.05-.5 9-4.76 9-9.95z"/></svg>
             </a>
-            
-            <div class="hidden lg:flex items-center space-x-reverse space-x-8 font-bold text-slate-600">
-                <a href="#home" data-i18n="nav-home" class="hover:text-blue-600 transition">الرئيسية</a>
-                <a href="#services" data-i18n="nav-services" class="hover:text-blue-600 transition">خدماتنا</a>
-                <a href="#about" data-i18n="nav-about" class="hover:text-blue-600 transition">من نحن</a>
-                <a href="#contact" data-i18n="nav-contact" class="hover:text-blue-600 transition">اتصل بنا</a>
-            </div>
-
-            <div class="flex items-center gap-4">
-                <select id="langSwitcher" onchange="changeLanguage(this.value)" class="bg-slate-100 border-none rounded-lg px-3 py-2 text-sm font-bold outline-none cursor-pointer">
-                    <option value="ar">العربية (AR)</option>
-                    <option value="en">English (EN)</option>
-                    <option value="tr">Türkçe (TR)</option>
-                </select>
-                <a href="#contact" data-i18n="nav-cta" class="bg-blue-600 text-white px-5 py-2 rounded-lg font-bold hover:bg-blue-700 transition hidden sm:block">اطلب عرضاً</a>
-            </div>
-        </nav>
-    </header>
-
-    <!-- Hero Section -->
-    <section id="home" class="hero-gradient text-white py-32 px-6 overflow-hidden">
-        <div class="container mx-auto flex flex-col md:flex-row items-center gap-12">
-            <div class="md:w-1/2 text-center md:text-right">
-                <h1 class="text-5xl md:text-7xl font-black mb-8 main-title" data-i18n="hero-title">نحو عصر رقمي <br><span class="text-blue-400">أكثر ابتكاراً</span></h1>
-                <p class="text-xl mb-12 opacity-80 leading-relaxed max-w-2xl" data-i18n="hero-desc">نصمم الحلول التي تمكن الشركات من النمو السريع والتميز في فضاء رقمي دائم التغير عبر هندسة برمجية واستراتيجيات تسويقية عالمية.</p>
-                <div class="flex flex-wrap justify-center md:justify-start gap-4">
-                    <a href="#contact" data-i18n="btn-start" class="bg-white text-blue-900 px-10 py-4 rounded-xl font-bold hover:shadow-2xl transition-all">ابدأ مشروعك</a>
-                    <a href="#services" data-i18n="btn-services" class="bg-blue-800/50 backdrop-blur-sm border border-blue-400/30 px-10 py-4 rounded-xl font-bold hover:bg-blue-700 transition">خدماتنا</a>
-                </div>
-            </div>
-            <div class="md:w-1/2 flex justify-center relative">
-                <div class="hero-image-container w-full">
-                    <img id="heroImage" src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1000&q=80" 
-                         alt="Digital Business Workspace" 
-                         class="w-full h-full object-cover transform hover:scale-105 transition duration-700"
-                         onerror="this.src='https://via.placeholder.com/1000x600/1e293b/ffffff?text=NEXORA+Digital+Innovation';">
-                </div>
-            </div>
+            <a href="https://instagram.com/nexora233/" target="_blank" class="w-10 h-10 rounded-full bg-white border flex items-center justify-center hover:bg-pink-600 hover:text-white transition shadow-sm">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+            </a>
+          </div>
         </div>
-    </section>
+      </div>
+      <div class="pt-8 border-t text-center text-xs text-slate-400 font-bold">© 2024 NEXORA SOLUTIONS. نبتكر لنرتقي.</div>
+    </div>
+  </footer>
 
-    <!-- Services Section -->
-    <section id="services" class="py-24 bg-slate-50">
-        <div class="container mx-auto px-6">
-            <div class="text-center mb-20">
-                <h2 class="text-4xl font-extrabold text-slate-900 mb-4" data-i18n="services-title">خدماتنا المتكاملة</h2>
-                <p class="text-slate-500 text-lg" data-i18n="services-subtitle">حلول احترافية صُممت لنمو أعمالك</p>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                <div class="bg-white p-10 rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl transition-all">
-                    <div class="w-14 h-14 bg-blue-100 rounded-xl flex items-center justify-center text-blue-600 mb-6">
-                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
-                    </div>
-                    <h4 class="text-xl font-bold mb-4" data-i18n="s1-t">الخدمات التقنية والبرمجية</h4>
-                    <p class="text-slate-500 text-sm leading-relaxed" data-i18n="s1-d">تطوير تطبيقات الويب والجوال المخصصة والأنظمة السحابية المعقدة.</p>
-                </div>
-                <div class="bg-white p-10 rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl transition-all">
-                    <div class="w-14 h-14 bg-pink-100 rounded-xl flex items-center justify-center text-pink-600 mb-6">
-                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"></path></svg>
-                    </div>
-                    <h4 class="text-xl font-bold mb-4" data-i18n="s2-t">التسويق الرقمي والهوية</h4>
-                    <p class="text-slate-500 text-sm leading-relaxed" data-i18n="s2-d">بناء هويات بصرية قوية وحملات تسويقية استراتيجية مدروسة.</p>
-                </div>
-                <div class="bg-white p-10 rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl transition-all">
-                    <div class="w-14 h-14 bg-green-100 rounded-xl flex items-center justify-center text-green-600 mb-6">
-                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2z"></path></svg>
-                    </div>
-                    <h4 class="text-xl font-bold mb-4" data-i18n="s3-t">الاستشارات وحلول الأعمال</h4>
-                    <p class="text-slate-500 text-sm leading-relaxed" data-i18n="s3-d">تحويل التحديات إلى فرص عبر دراسات الجدوى والفعالية التشغيلية.</p>
-                </div>
-                <div class="bg-white p-10 rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl transition-all">
-                    <div class="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center text-purple-600 mb-6">
-                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                    </div>
-                    <h4 class="text-xl font-bold mb-4" data-i18n="s4-t">الابتكار والتطوير المركزي</h4>
-                    <p class="text-slate-500 text-sm leading-relaxed" data-i18n="s4-d">دمج الذكاء الاصطناعي والأتمتة لتطوير منتجات رقمية سباقة.</p>
-                </div>
-            </div>
-        </div>
-    </section>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    const translations = {
+      ar: {
+        dir: "rtl",
+        "nav-home": "الرئيسية", "nav-about": "من نحن", "nav-services": "خدماتنا", "nav-portfolio": "أعمالنا", "nav-faq": "الأسئلة", "nav-contact": "اتصل بنا", "nav-cta": "ابدأ مشروعك",
+        "hero-title": "نبتكر <span class='text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300'>حلول الغد</span> اليوم",
+        "hero-desc": "شريككم التقني لتطوير برمجيات استثنائية، بناء هويات تجارية قوية، واستراتيجيات تسويقية تضمن لك الصدارة في السوق العالمي.",
+        "btn-start": "مشاهدة أعمالنا", "btn-about": "اكتشف من نحن",
+        "about-tag": "من نحن",
+        "about-intro": "نيكسورا (NEXORA) هي شركة خدمات متكاملة تقدّم حلولًا احترافية مصمّمة لدعم الأفراد والشركات في تحقيق النمو المستدام وبناء نماذج عمل أكثر كفاءة ومرونة.",
+        "about-philosophy": "نؤمن بأن القيمة الحقيقية لا تتحقق من خلال خدمة واحدة، بل من خلال منظومة متكاملة من الحلول الذكية التي تنطلق من فهم دقيق للاحتياجات، وتُبنى على تخطيط منهجي، وتُنفَّذ وفق أعلى المعايير المهنية.",
+        "about-range": "نغطي في نيكسورا مجموعة واسعة من الخدمات تشمل الاستشارات المتخصصة، الحلول التقنية، الخدمات الإدارية والتنظيمية، والتكامل المؤسسي، بما يضمن لعملائنا تجربة متماسكة ونتائج قابلة للقياس.",
+        "vision-title": "رؤيتنا", "vision-text": "أن نكون الشريك الاستراتيجي الموثوق الذي يعتمد عليه عملاؤنا في تطوير أعمالهم، وتحويل التحديات إلى فرص حقيقية للنمو والتوسّع.",
+        "mission-title": "رسالتنا", "mission-text": "تقديم حلول متكاملة تجمع بين الاحترافية، الابتكار، والموثوقية، مع الالتزام بأعلى معايير الجودة والشفافية.",
+        "values-title": "قيمنا الجوهرية", "values-subtitle": "القواعد التي نرتكز عليها في كل خطوة",
+        "val-1": "الاحترافية في الأداء", "val-2": "الدقة في التخطيط والتنفيذ", "val-3": "الابتكار في الحلول", "val-4": "الشفافية وبناء الثقة", "val-5": "الشراكة طويلة الأمد",
+        "services-title": "خدماتنا المتميزة", "portfolio-title": "معرض الأعمال", "p1-desc": "منصة تجارة إلكترونية متطورة بنظام ذكاء اصطناعي.", "p2-desc": "نظام دفع إلكتروني آمن ومشفر بأعلى المعايير.", "p3-desc": "لوحة تحكم ذكية لإدارة الموارد البشرية والعمليات.",
+        "contact-title": "لنحول رؤيتك إلى <br><span class='text-blue-600'>واقع رقمي</span>", "contact-desc": "فريقنا جاهز للإجابة على كافة استفساراتكم. تواصلوا معنا عبر البريد أو واتساب مباشرة.",
+        "c-mail-lbl": "البريد الإلكتروني الرسمي", "ph-name": "الاسم الكامل", "ph-email": "البريد الإلكتروني", "ph-msg": "كيف يمكننا مساعدتك؟", "btn-send": "أرسل الطلب الآن",
+        "stat-1": "مشروع منجز", "stat-2": "سنوات خبرة", "stat-3": "رضا العملاء", "stat-4": "خبير تقني", "faq-title": "الأسئلة الشائعة", "footer-desc": "بوابتكم للابتكار الرقمي والتحول الاستراتيجي. نجمع بين الخبرة التقنية العميقة والرؤية الإبداعية لخلق منتجات رقمية تفوق التوقعات."
+      },
+      en: {
+        dir: "ltr",
+        "nav-home": "Home", "nav-about": "About", "nav-services": "Services", "nav-portfolio": "Portfolio", "nav-contact": "Contact", "nav-cta": "Start Project",
+        "hero-title": "Innovating <span class='text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300'>Tomorrow's Solutions</span> Today",
+        "hero-desc": "Your tech partner for exceptional software, powerful brand identities, and marketing strategies for global leadership.",
+        "btn-start": "View Portfolio", "btn-about": "Learn More",
+        "about-tag": "About Us",
+        "about-intro": "NEXORA is an integrated services company providing professional solutions designed to support individuals and businesses in achieving sustainable growth.",
+        "about-philosophy": "We believe true value is achieved through an integrated system of smart solutions built on systematic planning and professional execution.",
+        "about-range": "NEXORA covers specialized consulting, tech solutions, administrative services, and institutional integration.",
+        "vision-title": "Our Vision", "vision-text": "To be the trusted strategic partner our clients rely on to develop their businesses and turn challenges into opportunities.",
+        "mission-title": "Our Mission", "mission-text": "To provide integrated solutions combining professionalism, innovation, and reliability with commitment to quality.",
+        "values-title": "Our Values", "values-subtitle": "The principles we stand on in every step",
+        "val-1": "Professional Performance", "val-2": "Precision in Planning", "val-3": "Innovation in Solutions", "val-4": "Transparency & Trust", "val-5": "Long-term Partnership",
+        "services-title": "Our Services", "portfolio-title": "Portfolio", "p1-desc": "Advanced e-commerce platform with AI engine.", "p2-desc": "Secure encrypted payment system.", "p3-desc": "Smart dashboard for HR and operations.",
+        "contact-title": "Turning Your Vision Into <br><span class='text-blue-600'>Digital Reality</span>", "contact-desc": "Our team is ready to answer all your inquiries. Reach us via email or WhatsApp.",
+        "c-mail-lbl": "Official Email", "ph-name": "Full Name", "ph-email": "Email Address", "ph-msg": "How can we help you?", "btn-send": "Send Now",
+        "stat-1": "Projects Done", "stat-2": "Years of Exp", "stat-3": "Client Satisfaction", "stat-4": "Tech Experts", "faq-title": "FAQ", "footer-desc": "Your gateway to digital innovation and strategic transformation. We combine tech expertise with creative vision."
+      }
+    };
 
-    <!-- About Section -->
-    <section id="about" class="py-32 bg-white text-center">
-        <div class="container mx-auto px-6 max-w-4xl">
-            <div class="mb-10">
-                <span class="text-5xl font-black text-blue-600 block mb-4" data-i18n="about-exp">10+ سنوات</span>
-                <span class="text-slate-400 font-bold uppercase tracking-widest text-sm italic" data-i18n="about-sub">من التميز والابتكار</span>
-            </div>
-            <h3 class="text-4xl font-bold text-slate-900 mb-8" data-i18n="about-title">نعيد صياغة مفهوم التميز الرقمي</h3>
-            <p class="text-xl text-slate-600 mb-12 leading-relaxed" data-i18n="about-desc">
-                نحن فريق متخصص في تقديم حلول تقنية وبرمجية وتسويقية متكاملة، نساعد الشركات ورواد الأعمال على تطوير أعمالهم وتعزيز حضورهم الرقمي من خلال حلول مبتكرة، واحترافية تفوق التوقعات.
-            </p>
-            <div class="flex justify-center gap-10">
-                <div class="flex items-center gap-2">
-                    <span class="w-3 h-3 bg-blue-600 rounded-full"></span>
-                    <p class="font-bold text-slate-800" data-i18n="val-1">دقة في التنفيذ</p>
-                </div>
-                <div class="flex items-center gap-2">
-                    <span class="w-3 h-3 bg-blue-600 rounded-full"></span>
-                    <p class="font-bold text-slate-800" data-i18n="val-2">التزام بالنتائج</p>
-                </div>
-            </div>
-        </div>
-    </section>
+    function changeLanguage(lang) {
+      const content = translations[lang] || translations.ar;
+      document.documentElement.setAttribute('dir', content.dir);
+      document.documentElement.setAttribute('lang', lang);
 
-    <!-- Contact Section -->
-    <section id="contact" class="py-24 bg-slate-900 text-white">
-        <div class="container mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-16">
-            <div class="text-right" id="contact-info">
-                <h2 class="text-4xl font-bold mb-10" data-i18n="contact-title">تواصل معنا مباشرة</h2>
-                <div class="space-y-10">
-                    <div class="flex items-center gap-6">
-                        <div class="w-14 h-14 bg-green-500 rounded-2xl flex items-center justify-center">
-                            <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"></path></svg>
-                        </div>
-                        <div>
-                            <p class="text-slate-400 text-sm" data-i18n="c-wa">واتساب</p>
-                            <a href="https://wa.me/963988893928?text=مرحباً نكسورا" target="_blank" class="text-2xl font-bold">00963 988893928</a>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-6">
-                        <div class="w-14 h-14 bg-blue-600 rounded-2xl flex items-center justify-center font-bold text-xl">@</div>
-                        <div>
-                            <p class="text-slate-400 text-sm" data-i18n="c-mail">الايميل</p>
-                            <p class="text-xl font-bold">Abdullah.sude23@gmail.com</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-6">
-                        <div class="w-14 h-14 bg-slate-700 rounded-2xl flex items-center justify-center text-xl">📍</div>
-                        <div>
-                            <p class="text-slate-400 text-sm" data-i18n="c-loc">الموقع</p>
-                            <p class="text-xl font-bold" data-i18n="c-city">سوريا - دمشق</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="bg-white/5 p-10 rounded-3xl backdrop-blur-sm border border-white/10">
-                <form class="space-y-6">
-                    <input type="text" data-i18n-ph="ph-name" placeholder="الاسم" class="w-full bg-slate-800 border border-slate-700 p-4 rounded-xl outline-none focus:border-blue-500 text-white">
-                    <input type="email" data-i18n-ph="ph-email" placeholder="الايميل" class="w-full bg-slate-800 border border-slate-700 p-4 rounded-xl outline-none focus:border-blue-500 text-white">
-                    <textarea rows="4" data-i18n-ph="ph-msg" placeholder="الرسالة" class="w-full bg-slate-800 border border-slate-700 p-4 rounded-xl outline-none focus:border-blue-500 text-white"></textarea>
-                    <button class="w-full bg-blue-600 text-white p-4 rounded-xl font-bold hover:bg-blue-700 transition" data-i18n="btn-send">أرسل الطلب</button>
-                </form>
-            </div>
-        </div>
-    </section>
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (content[key]) el.innerHTML = content[key];
+      });
 
-    <!-- Footer -->
-    <footer class="bg-white py-16 border-t text-slate-600 text-center">
-        <div class="container mx-auto px-6">
-            <div class="flex justify-center items-center gap-3 mb-8">
-                <div class="flex items-center">
-                    <!-- تكبير حجم الشعار في التذييل أيضاً إلى h-20 -->
-                    <img id="footerLogo" src="Untitled-3-01.jpg" alt="Logo Footer" class="h-20 w-auto" 
-                         onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                    <span class="logo-fallback" style="display:none">NEXORA</span>
-                </div>
-            </div>
-            <p class="max-w-2xl mx-auto text-lg mb-8" data-i18n="footer-desc">بوابتكم للابتكار الرقمي والتحول الاستراتيجي. نجمع بين الخبرة التقنية والرؤية الإبداعية.</p>
-            
-            <div class="flex justify-center gap-8 mb-8 text-2xl">
-                <a href="https://www.facebook.com/Nexora6" target="_blank" class="social-hover text-blue-800 transition-all">
-                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-                </a>
-                <a href="https://www.instagram.com/nexora233/" target="_blank" class="social-hover text-pink-600 transition-all">
-                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-                </a>
-            </div>
+      document.querySelectorAll('[data-i18n-ph]').forEach(el => {
+        const key = el.getAttribute('data-i18n-ph');
+        if (content[key]) el.placeholder = content[key];
+      });
+      
+      const values = document.querySelectorAll('.value-card');
+      values.forEach(v => {
+          if (content.dir === 'rtl') {
+              v.style.borderRight = "4px solid #3b82f6"; v.style.borderLeft = "none";
+              v.style.paddingRight = "1.5rem"; v.style.paddingLeft = "0";
+          } else {
+              v.style.borderLeft = "4px solid #3b82f6"; v.style.borderRight = "none";
+              v.style.paddingLeft = "1.5rem"; v.style.paddingRight = "0";
+          }
+      });
+    }
 
-            <p class="text-xs text-slate-400" data-i18n="copy">© 2024 NEXORA SOLUTIONS. نبتكر لنرتقي.</p>
-        </div>
-    </footer>
-
-    <script>
-        const translations = {
-            ar: {
-                dir: "rtl",
-                "nav-home": "الرئيسية",
-                "nav-services": "خدماتنا",
-                "nav-about": "من نحن",
-                "nav-contact": "اتصل بنا",
-                "nav-cta": "اطلب عرضاً",
-                "hero-title": "نحو عصر رقمي <br><span class='text-blue-400'>أكثر ابتكاراً</span>",
-                "hero-desc": "نصمم الحلول التي تمكن الشركات من النمو السريع والتميز في فضاء رقمي دائم التغير عبر هندسة برمجية واستراتيجيات تسويقية عالمية.",
-                "btn-start": "ابدأ مشروعك",
-                "btn-services": "خدماتنا",
-                "services-title": "خدماتنا المتكاملة",
-                "services-subtitle": "حلول احترافية صُممت لنمو أعمالك",
-                "s1-t": "الخدمات التقنية والبرمجية",
-                "s1-d": "تطوير تطبيقات الويب والجوال المخصصة والأنظمة السحابية المعقدة.",
-                "s2-t": "التسويق الرقمي والهوية",
-                "s2-d": "بناء هويات بصرية قوية وحملات تسويقية استراتيجية مدروسة.",
-                "s3-t": "الاستشارات وحلول الأعمال",
-                "s3-d": "تحويل التحديات إلى فرص عبر دراسات الجدوى والفعالية التشغيلية.",
-                "s4-t": "الابتكار والتطوير المركزي",
-                "s4-d": "دمج الذكاء الاصطناعي والأتمتة لتطوير منتجات رقمية سباقة.",
-                "about-exp": "10+ سنوات",
-                "about-sub": "من التميز والابتكار",
-                "about-title": "نعيد صياغة مفهوم التميز الرقمي",
-                "about-desc": "نحن فريق متخصص في تقديم حلول تقنية وبرمجية وتسويقية متكاملة، نساعد الشركات ورواد الأعمال على تطوير أعمالهم وتعزيز حضورهم الرقمي.",
-                "val-1": "دقة في التنفيذ",
-                "val-2": "التزام بالنتائج",
-                "contact-title": "تواصل معنا مباشرة",
-                "c-wa": "واتساب",
-                "c-mail": "الايميل",
-                "c-loc": "الموقع",
-                "c-city": "سوريا - دمشق",
-                "ph-name": "الاسم",
-                "ph-email": "الايميل",
-                "ph-msg": "الرسالة",
-                "btn-send": "أرسل الطلب",
-                "footer-desc": "بوابتكم للابتكار الرقمي والتحول الاستراتيجي. نجمع بين الخبرة التقنية والرؤية الإبداعية.",
-                "copy": "© 2024 NEXORA SOLUTIONS. نبتكر لنرتقي."
-            },
-            en: {
-                dir: "ltr",
-                "nav-home": "Home",
-                "nav-services": "Services",
-                "nav-about": "About Us",
-                "nav-contact": "Contact",
-                "nav-cta": "Get a Quote",
-                "hero-title": "Towards a More <br><span class='text-blue-400'>Innovative Digital Age</span>",
-                "hero-desc": "We design solutions that enable companies to grow rapidly and excel in an ever-changing digital space through software engineering and global marketing strategies.",
-                "btn-start": "Start Project",
-                "btn-services": "Our Services",
-                "services-title": "Our Integrated Services",
-                "services-subtitle": "Professional solutions designed for your growth",
-                "s1-t": "Tech & Software Services",
-                "s1-d": "Developing custom web/mobile apps and complex cloud systems.",
-                "s2-t": "Digital Marketing & Identity",
-                "s2-d": "Building strong visual identities and strategic marketing campaigns.",
-                "s3-t": "Consulting & Business Solutions",
-                "s3-d": "Turning challenges into opportunities through feasibility and operational studies.",
-                "s4-t": "Central Innovation & Dev",
-                "s4-d": "Integrating AI and automation to develop pioneering digital products.",
-                "about-exp": "10+ Years",
-                "about-sub": "Of Excellence & Innovation",
-                "about-title": "Redefining Digital Excellence",
-                "about-desc": "We are a specialized team providing integrated tech, software, and marketing solutions, helping businesses and entrepreneurs thrive.",
-                "val-1": "Execution Precision",
-                "val-2": "Commitment to Results",
-                "contact-title": "Contact Us Directly",
-                "c-wa": "WhatsApp",
-                "c-mail": "Email",
-                "c-loc": "Location",
-                "c-city": "Syria - Damascus",
-                "ph-name": "Full Name",
-                "ph-email": "Email Address",
-                "ph-msg": "How can we help you?",
-                "btn-send": "Send Request",
-                "footer-desc": "Your gateway to digital innovation and strategic transformation. We combine tech expertise with creative vision.",
-                "copy": "© 2024 NEXORA SOLUTIONS. Innovating to Elevate."
-            },
-            tr: {
-                dir: "ltr",
-                "nav-home": "Ana Sayfa",
-                "nav-services": "Hizmetlerimiz",
-                "nav-about": "Hakkımızda",
-                "nav-contact": "İletişim",
-                "nav-cta": "Teklif Al",
-                "hero-title": "Daha <br><span class='text-blue-400'>Yenilikçi Bir Dijital Çağa</span> Doğru",
-                "hero-desc": "Yazılım mühendisliği ve küresel pazarlama stratejileriyle, şirketlerin hızla büyümesini ve sürekli değişen dijital dünyada öne çıkmasını sağlayan çözümler tasarlıyoruz.",
-                "btn-start": "Projeye Başla",
-                "btn-services": "Hizmetlerimiz",
-                "services-title": "Entegre Hizmetlerimiz",
-                "services-subtitle": "Büyümeniz için tasarlanmış profesyonel çözümler",
-                "s1-t": "Teknik ve Yazılım Hizmetleri",
-                "s1-d": "Özel web ve mobil uygulamalar ile karmaşık bulut sistemleri geliştirme.",
-                "s2-t": "Dijital Pazarlama ve Marka Kimliği",
-                "s2-d": "Güçlü görsel kimlikler ve stratejik pazarlama kampanyaları oluşturma.",
-                "s3-t": "Danışmanlık ve İş Çözümleri",
-                "s3-d": "Fizibilite ve operasyonel çalışmalarla zorlukları fırsata dönüştürme.",
-                "s4-t": "Merkezi İnovasyon ve Geliştirme",
-                "s4-d": "Öncü dijital ürünler geliştirmek için yapay zeka ve otomasyonu entegre etme.",
-                "about-exp": "10+ Yıl",
-                "about-sub": "Mükemmeliyet ve İnovasyon",
-                "about-title": "Dijital Mükemmelliği Yeniden Tanımlıyoruz",
-                "about-desc": "Teknoloji, yazılım ve pazarlama çözümleri sunan, işletmelerين ve girişimcilerin dijital varlığını güçlendiren uzman bir ekibiz.",
-                "val-1": "Uygulama Hassasiyeti",
-                "val-2": "Sonuç Odaklılık",
-                "contact-title": "Bizimle Doğrudan İletişime Geçin",
-                "c-wa": "WhatsApp",
-                "c-mail": "E-posta",
-                "c-loc": "Konum",
-                "c-city": "Suriye - Şam",
-                "ph-name": "Ad Soyad",
-                "ph-email": "E-posta Adresi",
-                "ph-msg": "Size nasıl yardımcı olabiliriz?",
-                "btn-send": "Talebi Gönder",
-                "footer-desc": "Dijital inovasyon ve stratejik dönüşüm kapınız. Teknik uzmanlığı yaratıcı vizyonla birleştiriyoruz.",
-                "copy": "© 2024 NEXORA SOLUTIONS. Yükselmek İçin Yenilik Yapıyoruz."
-            }
-        };
-
-        function changeLanguage(lang) {
-            const content = translations[lang];
-            document.documentElement.setAttribute('dir', content.dir);
-            document.documentElement.setAttribute('lang', lang);
-
-            document.querySelectorAll('[data-i18n]').forEach(el => {
-                const key = el.getAttribute('data-i18n');
-                if (content[key]) {
-                    el.innerHTML = content[key];
-                }
-            });
-
-            document.querySelectorAll('[data-i18n-ph]').forEach(el => {
-                const key = el.getAttribute('data-i18n-ph');
-                if (content[key]) {
-                    el.placeholder = content[key];
-                }
-            });
-
-            const contactInfo = document.getElementById('contact-info');
-            if (contactInfo) {
-                if (content.dir === 'rtl') {
-                    contactInfo.classList.add('text-right');
-                    contactInfo.classList.remove('text-left');
-                } else {
-                    contactInfo.classList.add('text-left');
-                    contactInfo.classList.remove('text-right');
-                }
-            }
-        }
-
-        window.onload = () => {
-            changeLanguage('ar');
-        };
-    </script>
+    window.addEventListener('load', () => {
+      AOS.init({ duration: 800, once: true });
+      changeLanguage('ar');
+    });
+  </script>
 </body>
 </html>
