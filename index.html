@@ -1,0 +1,1597 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NEXORA SYRIA | Enterprise Platform 2026</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-storage-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth-compat.js"></script>
+  
+  <!-- PDF Generator -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+  <!-- PWA Manifest -->
+  <link rel="manifest" id="manifest-link">
+  <script>
+    const manifestData = {
+      name: "NEXORA SYRIA", short_name: "NEXORA", start_url: ".", display: "standalone",
+      background_color: "#050B14", theme_color: "#06b6d4",
+      icons: [{ src: "https://cdn-icons-png.flaticon.com/512/3260/3260838.png", sizes: "512x512", type: "image/png" }]
+    };
+    document.getElementById('manifest-link').href = 'data:application/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(manifestData));
+  </script>
+</head>
+<body class="bg-[#050B14] text-white overflow-x-hidden antialiased transition-all duration-300">
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect, useRef } = React;
+
+    // --- مسار شعار المنصة من ملف خارجي ---
+    const LOGO_BASE64 = "logo.png";
+
+    // --- إعدادات Firebase الجديدة ---
+    const firebaseConfig = {
+      apiKey: "AIzaSyCYzNFr4c7OxuvRgo19DJu11YhWJxdvvpg",
+      authDomain: "nexora-2026-f98d8.firebaseapp.com",
+      projectId: "nexora-2026-f98d8",
+      storageBucket: "nexora-2026-f98d8.firebasestorage.app",
+      messagingSenderId: "1088758000757",
+      appId: "1:1088758000757:web:dc35ece959de86a219dc3c"
+    };
+
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+    const db = firebase.firestore();
+    const storage = firebase.storage();
+    const auth = firebase.auth(); 
+
+    // --- قاموس اللغات (i18n) الشامل للمنصة ---
+    const locales = {
+      ar: {
+        welcome: "مرحباً بك،", id: "معرفك:", loginPlatform: "دخول المنصة", logout: "خروج", cart: "السلة",
+        explore: "استكشف خدماتنا الإلكترونية المتكاملة لعام 2026", servicesCats: "أقسام الخدمات (خدماتنا)",
+        myLiveOrders: "طلباتي المباشرة (Live)", noOrders: "لا توجد طلبات سابقة. ستظهر طلباتك هنا ليتم تتبعها.",
+        status: "الحالة:", about: "من نحن", ourServices: "خدماتنا", terms: "شروط الخدمة", rights: "© 2026 NEXORA SYRIA. جميع الحقوق محفوظة.",
+        backToPlat: "عودة للمنصة", loginTitle: "تسجيل الدخول", phoneNum: "رقم الواتساب المسجل", pass: "كلمة المرور",
+        verifying: "جاري التحقق...", loginBtn: "دخول للمنصة", noAccount: "ليس لديك حساب؟", createAcc: "إنشاء حساب جديد",
+        fullName: "الاسم الكامل", whatsapp: "رقم الواتساب", area: "المنطقة / المحافظة", choosePass: "تحديد كلمة مرور قوية",
+        regBtn: "تسجيل الحساب", haveAcc: "لديك حساب بالفعل؟", loginHere: "تسجيل الدخول",
+        addToOrder: "إضافة للطلب", emptyCat: "لا توجد خدمات حالياً في هذا القسم.", backToCats: "العودة للأقسام",
+        checkoutTitle: "إتمام الطلب", emptyCart: "السلة فارغة حالياً.", payMethod: "طريقة الدفع:", bankTransfer: "تحويل بنكي / حوالة خارجية",
+        cashPay: "دفع نقدي (في المركز)", transferDetails: "تفاصيل الحوالة:", attachReceipt: "يرجى تحويل المبلغ وتصوير الإيصال ورفعه هنا لتأكيد الطلب.",
+        attachBtn: "إرفاق صورة الإيصال (مطلوب)", totalRequired: "الإجمالي المطلوب:", confirmOrder: "إتمام وتأكيد الطلب",
+        processing: "جاري التأكيد والرفع...", downloadInvoice: "تحميل الفاتورة PDF",
+        adminDash: "الإدارة المركزية NEXORA", endSession: "إنهاء الجلسة", overview: "نظرة عامة", clientsDb: "قاعدة العملاء",
+        catalog: "الأقسام والخدمات", ordersAdmin: "الطلبات والمراقبة", settingsAdmin: "إدارة النظام",
+        totalClients: "إجمالي العملاء", pendingOrders: "الطلبات المعلقة", totalRev: "إجمالي الإيرادات المكتملة",
+        addService: "إضافة خدمة جديدة", updateService: "تحديث الخدمة", srvName: "اسم الخدمة", srvDesc: "وصف الخدمة", srvPrice: "السعر ($)",
+        publish: "حفظ ونشر الخدمة", currentSrvs: "الخدمات المعروضة حالياً", edit: "تعديل", delete: "حذف نهائي",
+        page: "صفحة", prev: "السابق", next: "التالي", filterAll: "الكل", viewAttach: "عرض المرفقات", updateStatus: "تحديث الحالة:",
+        statusPending: "قيد المراجعة ⏳", statusProgress: "جاري التنفيذ 🚀", statusDone: "مكتمل ✅", statusRejected: "مرفوض ❌",
+        aboutTitle: "من نحن", 
+        aboutDesc1: "نحن في NEXORA SYRIA فريق احترافي وشغوف بالتكنولوجيا، نجمع بين الخبرة والإبداع لتقديم خدمات إلكترونية وتقنية مميزة في مجالات متعددة.", 
+        aboutDesc2: "رؤيتنا هي تسهيل وصولك للخدمات الرقمية، بدءاً من البرمجة والتصميم وصولاً إلى شحن الألعاب والاشتراكات، كل ذلك عبر منصة واحدة ذكية تعمل على التطوير المستمر لتقديم أفضل العروض لعملائنا.",
+        termsTitle: "شروط الخدمة والسياسات", 
+        t1: "الالتزام بالتطوير", t1d: "منصتنا في حالة تحديث مستمر لتلبية احتياجاتكم. يحق للمنصة تعديل أسعار الخدمات أو العروض بناءً على تحديثات السوق لضمان استمرارية الجودة.",
+        t2: "الخصوصية والأمان المتقدم", t2d: "بياناتك، أرصدتك، وطلباتك محفوظة في بيئة آمنة ومشفرة تماماً. لا يتم مشاركة بيانات العملاء مع أي طرف ثالث إطلاقاً.",
+        t3: "سياسة الأرصدة والمكافآت", t3d: "جميع المكافآت المضافة لحسابك أثناء عروض الشحن هي أرصدة حقيقية يمكن استخدامها لشراء أي خدمة داخل المنصة، ولكن لا يمكن استردادها نقداً.",
+        adminGateway: "بوابة الإدارة المركزية NEXORA", adminMsg: "يرجى إدخال الرمز السري للوصول لبيانات المنصة.", cancel: "إلغاء", safeLogin: "دخول آمن",
+        wallet: "المحفظة الذكية", balance: "الرصيد المتاح:", topup: "طلب شحن رصيد", transHistory: "سجل العمليات المالية", 
+        payFromWallet: "دفع وإتمام من المحفظة", insufficient: "عذراً! الرصيد غير كافٍ. يرجى شحن المحفظة أولاً.", 
+        topupAmount: "المبلغ المراد شحنه (USD)", enterAmount: "أدخل المبلغ بالدولار", reqTopup: "إرسال طلب الشحن", 
+        noTrans: "لا توجد حركات مالية مسجلة بعد.", walletEmpty: "محفظتك فارغة، اشحن الآن لتتمكن من شراء الخدمات بضغطة زر واحدة.",
+        goToTopup: "الذهاب لشحن المحفظة", balanceCol: "الرصيد", transType: "نوع العملية", transAmount: "المبلغ", transDate: "التاريخ",
+        deposit: "إيداع 🟢", withdraw: "سداد 🔴", refund: "استرداد 🔵",
+        promoTitle: "أهلاً بك في", promoMsg1: "منصتنا تعمل على تطوير الخدمات بشكل دائم ومستمر! 🚀", promoMsg2: "ترقبوا دائماً أحدث الإضافات التقنية والعروض الحصرية التي نقدمها خصيصاً لكم.", promoBtn: "ابدأ الاستكشاف الآن",
+        exclusiveOffers: "عروض الشحن الحصرية:", topupGet: "اشحن", getBonus: "واحصل على", freeBonus: "مجاناً!", congrats: "🎉 مبروك! ستحصل على", extraFree: "إضافية مجاناً", expectedTotal: "الإجمالي الذي سيصل لمحفظتك:",
+        trustFund: "صندوق الأمانات (الرصيد)", bonusesGiven: "المكافآت الممنوحة", manageBonuses: "إدارة عروض ومكافآت الشحن", manageBonusesDesc: "حدد المبالغ التي إذا وصل إليها العميل يحصل على رصيد إضافي مجاني (مكافأة).", whenTopup: "عند شحن مبلغ (USD)", bonusValue: "قيمة المكافأة المجانية (USD)", addOfferBtn: "إضافة العرض", saveOffersBtn: "حفظ العروض وتطبيقها", adminReply: "رد الإدارة:"
+      },
+      en: {
+        welcome: "Welcome,", id: "Your ID:", loginPlatform: "Platform Login", logout: "Logout", cart: "Cart",
+        explore: "Explore our integrated digital services for 2026", servicesCats: "Service Categories",
+        myLiveOrders: "My Live Orders", noOrders: "No previous orders. Your requests will appear here.",
+        status: "Status:", about: "About Us", ourServices: "Services", terms: "Terms of Service", rights: "© 2026 NEXORA SYRIA. All rights reserved.",
+        backToPlat: "Back to Platform", loginTitle: "Login", phoneNum: "Registered WhatsApp", pass: "Password",
+        verifying: "Verifying...", loginBtn: "Login", noAccount: "Don't have an account?", createAcc: "Create New Account",
+        fullName: "Full Name", whatsapp: "WhatsApp Number", area: "Area / City", choosePass: "Set strong password",
+        regBtn: "Register Account", haveAcc: "Already have an account?", loginHere: "Login here",
+        addToOrder: "Add to Order", emptyCat: "No services currently in this category.", backToCats: "Back to Categories",
+        checkoutTitle: "Checkout", emptyCart: "Cart is currently empty.", payMethod: "Payment Method:", bankTransfer: "Bank Transfer / Remittance",
+        cashPay: "Cash Payment (At Center)", transferDetails: "Transfer Details:", attachReceipt: "Please transfer and upload the receipt here to confirm.",
+        attachBtn: "Attach Receipt (Required)", totalRequired: "Total Required:", confirmOrder: "Confirm Order",
+        processing: "Processing...", downloadInvoice: "Download PDF Invoice",
+        adminDash: "NEXORA Central Admin", endSession: "End Session", overview: "Overview", clientsDb: "Clients CRM",
+        catalog: "Catalog & Services", ordersAdmin: "Orders & Monitoring", settingsAdmin: "System Settings",
+        totalClients: "Total Clients", pendingOrders: "Pending Orders", totalRev: "Total Completed Revenue",
+        addService: "Add New Service", updateService: "Update Service", srvName: "Service Name", srvDesc: "Service Description", srvPrice: "Price ($)",
+        publish: "Save & Publish", currentSrvs: "Current Services", edit: "Edit", delete: "Delete",
+        page: "Page", prev: "Previous", next: "Next", filterAll: "All", viewAttach: "View Attachment", updateStatus: "Update Status:",
+        statusPending: "Pending ⏳", statusProgress: "In Progress 🚀", statusDone: "Completed ✅", statusRejected: "Rejected ❌",
+        aboutTitle: "About Us", 
+        aboutDesc1: "At NEXORA SYRIA, we are a professional and tech-passionate team, combining expertise and creativity to offer premium digital services in various fields.", 
+        aboutDesc2: "Our vision is to facilitate your access to digital services, from programming and design to game top-ups and subscriptions, all through a smart platform that is constantly evolving to offer the best deals for our clients.",
+        termsTitle: "Terms of Service & Policies", 
+        t1: "Commitment to Development", t1d: "Our platform is continuously updated to meet your needs. We reserve the right to adjust service prices or offers based on market updates to ensure continuous quality.",
+        t2: "Privacy & Advanced Security", t2d: "Your data, balances, and orders are stored in a fully encrypted and secure environment. Client data is never shared with any third party.",
+        t3: "Balances & Bonuses Policy", t3d: "All bonuses added to your account during top-up offers are real balances that can be used to purchase any service within the platform, but they cannot be refunded as cash.",
+        adminGateway: "NEXORA Admin Gateway", adminMsg: "Please enter the PIN code to access platform data.", cancel: "Cancel", safeLogin: "Secure Login",
+        wallet: "Smart Wallet", balance: "Available Balance:", topup: "Request Top-up", transHistory: "Transaction History", 
+        payFromWallet: "Pay from Wallet", insufficient: "Insufficient balance. Please top-up your wallet first.", 
+        topupAmount: "Top-up Amount (USD)", enterAmount: "Enter amount in USD", reqTopup: "Submit Top-up Request", 
+        noTrans: "No financial transactions recorded yet.", walletEmpty: "Your wallet is empty. Top-up now to buy services with 1-click.",
+        goToTopup: "Go to Top-up", balanceCol: "Balance", transType: "Type", transAmount: "Amount", transDate: "Date",
+        deposit: "Deposit 🟢", withdraw: "Payment 🔴", refund: "Refund 🔵",
+        promoTitle: "Welcome to", promoMsg1: "Our platform is continuously developing and improving services! 🚀", promoMsg2: "Stay tuned for the latest technical additions and exclusive offers tailored for you.", promoBtn: "Start Exploring Now",
+        exclusiveOffers: "Exclusive Top-up Offers:", topupGet: "Top up", getBonus: "and get", freeBonus: "for free!", congrats: "🎉 Congrats! You get", extraFree: "extra for free", expectedTotal: "Total added to your wallet:",
+        trustFund: "Trust Fund (Balances)", bonusesGiven: "Bonuses Given", manageBonuses: "Manage Top-up Bonuses", manageBonusesDesc: "Set amounts where clients receive free extra balance (bonus).", whenTopup: "When topping up (USD)", bonusValue: "Free Bonus Value (USD)", addOfferBtn: "Add Offer", saveOffersBtn: "Save & Apply Offers", adminReply: "Admin Reply:"
+      },
+      tr: {
+        welcome: "Hoş Geldiniz,", id: "Kimliğiniz:", loginPlatform: "Platform Girişi", logout: "Çıkış", cart: "Sepet",
+        explore: "2026 için entegre dijital hizmetlerimizi keşfedin", servicesCats: "Hizmet Kategorileri",
+        myLiveOrders: "Canlı Siparişlerim", noOrders: "Önceki sipariş yok. Talepleriniz burada görünecek.",
+        status: "Durum:", about: "Hakkımızda", ourServices: "Hizmetlerimiz", terms: "Hizmet Şartları", rights: "© 2026 NEXORA SYRIA. Tüm hakları saklıdır.",
+        backToPlat: "Platforma Dön", loginTitle: "Giriş", phoneNum: "Kayıtlı WhatsApp", pass: "Şifre",
+        verifying: "Doğrulanıyor...", loginBtn: "Giriş Yap", noAccount: "Hesabınız yok mu?", createAcc: "Yeni Hesap Oluştur",
+        fullName: "Ad Soyad", whatsapp: "WhatsApp Numarası", area: "Bölge / Şehir", choosePass: "Güçlü şifre belirle",
+        regBtn: "Hesap Oluştur", haveAcc: "Zaten hesabınız var mı?", loginHere: "Buradan giriş yapın",
+        addToOrder: "Siparişe Ekle", emptyCat: "Bu kategoride şu anda hizmet yok.", backToCats: "Kategorilere Dön",
+        checkoutTitle: "Ödeme", emptyCart: "Sepet şu anda boş.", payMethod: "Ödeme Yöntemi:", bankTransfer: "Banka Havalesi",
+        cashPay: "Nakit Ödeme (Merkezde)", transferDetails: "Transfer Detayları:", attachReceipt: "Lütfen transfer yapın ve makbuzu buraya yükleyin.",
+        attachBtn: "Makbuzu Ekle (Zorunlu)", totalRequired: "Toplam Gerekli:", confirmOrder: "Siparişi Onayla",
+        processing: "İşleniyor...", downloadInvoice: "Faturayı İndir (PDF)",
+        adminDash: "NEXORA Yönetimi", endSession: "Oturumu Kapat", overview: "Genel Bakış", clientsDb: "Müşteriler CRM",
+        catalog: "Katalog ve Hizmetler", ordersAdmin: "Siparişler ve İzleme", settingsAdmin: "Sistem Ayarları",
+        totalClients: "Toplam Müşteri", pendingOrders: "Bekleyen Siparişler", totalRev: "Toplam Gelir",
+        addService: "Yeni Hizmet Ekle", updateService: "Hizmeti Güncelle", srvName: "Hizmet Adı", srvDesc: "Açıklama", srvPrice: "Fiyat ($)",
+        publish: "Kaydet ve Yayınla", currentSrvs: "Mevcut Hizmetler", edit: "Düzenle", delete: "Sil",
+        page: "Sayfa", prev: "Önceki", next: "Sonraki", filterAll: "Tümü", viewAttach: "Eki Görüntüle", updateStatus: "Durumu Güncelle:",
+        statusPending: "Bekliyor ⏳", statusProgress: "Devam Ediyor 🚀", statusDone: "Tamamlandı ✅", statusRejected: "Reddedildi ❌",
+        aboutTitle: "Hakkımızda", 
+        aboutDesc1: "NEXORA SYRIA olarak, çeşitli alanlarda birinci sınıf dijital hizmetler sunmak için uzmanlık ve yaratıcılığı birleştiren, teknoloji tutkulu profesyonel bir ekibiz.", 
+        aboutDesc2: "Vizyonumuz, programlama ve tasarımdan oyun yüklemelerine ve aboneliklere kadar dijital hizmetlere erişiminizi, müşterilerimiz için en iyi fırsatları sunmak üzere sürekli gelişen akıllı bir platform aracılığıyla kolaylaştırmaktır.",
+        termsTitle: "Hizmet Şartları ve Politikalar", 
+        t1: "Gelişime Bağlılık", t1d: "Platformumuz ihtiyaçlarınızı karşılamak için sürekli güncellenmektedir. Sürekli kaliteyi sağlamak için pazar güncellemelerine dayalı olarak hizmet fiyatlarını veya teklifleri değiştirme hakkını saklı tutarız.",
+        t2: "Gizlilik ve Gelişmiş Güvenlik", t2d: "Verileriniz, bakiyeleriniz ve siparişleriniz tamamen şifrelenmiş ve güvenli bir ortamda saklanır. Müşteri verileri hiçbir üçüncü tarafla asla paylaşılmaz.",
+        t3: "Bakiyeler ve Bonuslar Politikası", t3d: "Yükleme teklifleri sırasında hesabınıza eklenen tüm bonuslar, platform içindeki herhangi bir hizmeti satın almak için kullanılabilecek gerçek bakiyelerdir, ancak nakit olarak iade edilemezler.",
+        adminGateway: "NEXORA Yönetim Geçidi", adminMsg: "Platform verilerine erişmek için lütfen PIN kodunu girin.", cancel: "İptal", safeLogin: "Güvenli Giriş",
+        wallet: "Akıllı Cüzdan", balance: "Kullanılabilir Bakiye:", topup: "Bakiye Yükle", transHistory: "İşlem Geçmişi", 
+        payFromWallet: "Cüzdandan Öde", insufficient: "Yetersiz bakiye. Lütfen önce cüzdanınıza yükleme yapın.", 
+        topupAmount: "Yüklenecek Tutar (USD)", enterAmount: "Miktarı USD olarak girin", reqTopup: "Yükleme Talebi Gönder", 
+        noTrans: "Henüz finansal işlem kaydedilmedi.", walletEmpty: "Cüzdanınız boş. Tek tıkla hizmet almak için şimdi yükleyin.",
+        goToTopup: "Yükleme Yap", balanceCol: "Bakiye", transType: "Tip", transAmount: "Miktar", transDate: "Tarih",
+        deposit: "Yatırma 🟢", withdraw: "Ödeme 🔴", refund: "İade 🔵",
+        promoTitle: "Hoş Geldiniz", promoMsg1: "Platformumuz sürekli olarak gelişmekte ve hizmetlerini iyileştirmektedir! 🚀", promoMsg2: "Sizin için hazırladığımız en son teknik yenilikleri ve özel teklifleri takipte kalın.", promoBtn: "Hemen Keşfetmeye Başla",
+        exclusiveOffers: "Özel Yükleme Teklifleri:", topupGet: "Yükle", getBonus: "ve", freeBonus: "bedava kazan!", congrats: "🎉 Tebrikler! Fazladan", extraFree: "bedava kazandın", expectedTotal: "Cüzdanınıza eklenecek toplam tutar:",
+        trustFund: "Emanet Fonu (Bakiyeler)", bonusesGiven: "Verilen Bonuslar", manageBonuses: "Yükleme Bonuslarını Yönet", manageBonusesDesc: "Müşterilerin bedava ekstra bakiye alacağı tutarları belirleyin.", whenTopup: "Yüklenen Tutar (USD)", bonusValue: "Bedava Bonus Değeri (USD)", addOfferBtn: "Teklif Ekle", saveOffersBtn: "Kaydet ve Uygula", adminReply: "Yönetici Yanıtı:"
+      }
+    };
+
+    // --- أيقونات NEXORA الشاملة ---
+    const CodeIcon=({className})=><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>;
+    const HeadphonesIcon=({className})=><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M3 18v-6a9 9 0 0 1 18 0v6"></path><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path></svg>;
+    const FileTextIcon=({className})=><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>;
+    const PenToolIcon=({className})=><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M12 19l7-7 3 3-7 7-3-3z"></path><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path><path d="M2 2l7.586 7.586"></path><circle cx="11" cy="11" r="2"></circle></svg>;
+    const MegaphoneIcon=({className})=><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polygon points="11 19 2 12 11 5 11 19"></polygon><path d="M22 12A10 10 0 0 1 12 22"></path><path d="M22 12A10 10 0 0 0 12 2"></path></svg>;
+    const ShieldCheckIcon=({className})=><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><polyline points="9 12 11 14 15 10"></polyline></svg>;
+    const ShoppingBagIcon=({className})=><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>;
+    const ActivityIcon=({className})=><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>;
+    const UserIcon=({className})=><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>;
+    const LockIcon=({className})=><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>;
+    const MapPinIcon=({className})=><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg>;
+    const PhoneIcon=({className})=><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>;
+    const ArrowRightIcon=({className})=><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>;
+    const SettingsIcon=({className})=><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>;
+    const UploadCloudIcon=({className})=><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M16 16l-4-4-4 4"></path><path d="M12 12v9"></path><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"></path></svg>;
+    const CheckCircleIcon=({className})=><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>;
+    const Trash2Icon=({className})=><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>;
+    const EditIcon=({className})=><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>;
+    const EyeIcon=({className})=><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>;
+    const DollarSignIcon=({className})=><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>;
+    const UsersIcon=({className})=><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>;
+    const InfoIcon=({className})=><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>;
+    const DownloadIcon=({className})=><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>;
+    const WalletIcon=({className})=><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"></path><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"></path><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"></path></svg>;
+    const GiftIcon=({className})=><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polyline points="20 12 20 22 4 22 4 12"></polyline><rect x="2" y="7" width="20" height="5"></rect><line x1="12" y1="22" x2="12" y2="7"></line><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path></svg>;
+
+    const SkeletonCard = () => (
+      <div className="glass-card p-6 h-48 animate-pulse bg-white/5 flex flex-col justify-between">
+         <div className="space-y-3"><div className="h-4 bg-white/10 rounded w-3/4"></div><div className="h-3 bg-white/5 rounded w-full"></div><div className="h-3 bg-white/5 rounded w-5/6"></div></div>
+         <div className="flex justify-between items-center mt-6 border-t border-white/5 pt-4"><div className="h-6 bg-white/10 rounded w-1/4"></div><div className="h-8 bg-white/10 rounded w-1/3"></div></div>
+      </div>
+    );
+
+    function App() {
+      const [lang, setLang] = useState('ar');
+      const t = (key) => (locales[lang] && locales[lang][key]) ? locales[lang][key] : locales['ar'][key];
+      const [currentView, setCurrentView] = useState('mainHub');
+      const [showWelcomePromo, setShowWelcomePromo] = useState(false);
+      
+      const [userData, setUserData] = useState(() => {
+          const saved = localStorage.getItem('nexoraSession');
+          return saved ? JSON.parse(saved) : null;
+      }); 
+      
+      const [loginInput, setLoginInput] = useState(''); 
+      const [loginPassword, setLoginPassword] = useState(''); 
+      const [registerData, setRegisterData] = useState({ name: '', whatsapp: '', area: '', password: '' });
+      const [loading, setLoading] = useState(false);
+      const [toastMessage, setToastMessage] = useState('');
+      const [dialog, setDialog] = useState({ isOpen: false, type: 'alert', message: '', onConfirm: null, inputType: 'password', inputPlaceholder: '' });
+
+      const hashPassword = async (password) => {
+         const msgBuffer = new TextEncoder().encode(password);
+         const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+         const hashArray = Array.from(new Uint8Array(hashBuffer));
+         return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+      };
+
+      const defaultCategories = [
+         { id: 'CAT-001', name_ar: 'البرمجة والتطوير', name_en: 'Development', name_tr: 'Geliştirme', icon: 'Code', color: 'blue' },
+         { id: 'CAT-002', name_ar: 'تصميم وإبداع', name_en: 'Design & Creativity', name_tr: 'Tasarım ve Yaratıcılık', icon: 'PenTool', color: 'purple' },
+         { id: 'CAT-003', name_ar: 'تسويق رقمي', name_en: 'Digital Marketing', name_tr: 'Dijital Pazarlama', icon: 'Megaphone', color: 'cyan' },
+         { id: 'CAT-004', name_ar: 'شحن ألعاب', name_en: 'Game Top-up', name_tr: 'Oyun Yükleme', icon: 'ShoppingBag', color: 'orange' },
+         { id: 'CAT-005', name_ar: 'اشتراكات برامج', name_en: 'Software Subscriptions', name_tr: 'Yazılım Abonelikleri', icon: 'ShieldCheck', color: 'green' },
+         { id: 'CAT-006', name_ar: 'خدمات طلابية', name_en: 'Student Services', name_tr: 'Öğrenci Hizmetleri', icon: 'FileText', color: 'indigo' },
+         { id: 'CAT-007', name_ar: 'فواتير', name_en: 'Invoices', name_tr: 'Faturalar', icon: 'Activity', color: 'yellow' },
+         { id: 'CAT-008', name_ar: 'شبكة إنترنت', name_en: 'Internet Network', name_tr: 'İnternet Ağı', icon: 'Headphones', color: 'blue' }
+      ];
+      
+      const [services, setServices] = useState([]);
+      const [activeCategory, setActiveCategory] = useState(null);
+      const [isFetchingServices, setIsFetchingServices] = useState(true);
+
+      const [cart, setCart] = useState(() => {
+          const saved = localStorage.getItem('nexoraCart');
+          return saved ? JSON.parse(saved) : [];
+      });
+      const [isCartOpen, setIsCartOpen] = useState(false);
+      const [discountInfo, setDiscountInfo] = useState({ active: false, percent: 0 }); 
+      const [topupAmount, setTopupAmount] = useState('');
+      const [receiptFile, setReceiptFile] = useState(null); 
+      const [paymentMethod, setPaymentMethod] = useState('bank');
+      const [userTransactions, setUserTransactions] = useState([]);
+
+      const [userRequests, setUserRequests] = useState([]);
+      const [showAdminLogin, setShowAdminLogin] = useState(false);
+      const [adminPin, setAdminPin] = useState('');
+      const [adminTasks, setAdminTasks] = useState([]);
+      const [adminClients, setAdminClients] = useState([]);
+      const [adminViewSection, setAdminViewSection] = useState('overview');
+      const [adminOrderFilter, setAdminOrderFilter] = useState('all'); 
+      const [newItem, setNewItem] = useState({ name_ar: '', name_en: '', name_tr: '', desc_ar: '', desc_en: '', desc_tr: '', price: '', categoryId: 'CAT-001' });
+      const [editingServiceId, setEditingServiceId] = useState(null);
+      const [activeLangTab, setActiveLangTab] = useState('ar');
+      const [editingClient, setEditingClient] = useState(null); 
+
+      const [adminClientsPage, setAdminClientsPage] = useState(1);
+      const [adminOrdersPage, setAdminOrdersPage] = useState(1);
+      const itemsPerPage = 10;
+
+      const [currency, setCurrency] = useState('USD');
+      const [exchangeRate, setExchangeRate] = useState(15000);
+      const [newExchangeRateInput, setNewExchangeRateInput] = useState('');
+      
+      const [bonusTiers, setBonusTiers] = useState([{threshold: 25, bonus: 5}, {threshold: 50, bonus: 10}, {threshold: 100, bonus: 25}]);
+      const [newTier, setNewTier] = useState({threshold: '', bonus: ''});
+
+      const previousTaskCount = useRef(0);
+
+      const showAlert = (message) => setDialog({ isOpen: true, type: 'alert', message, onConfirm: null });
+      const showConfirm = (message, onConfirm) => setDialog({ isOpen: true, type: 'confirm', message, onConfirm });
+      const showPrompt = (message, onConfirm, inputType = 'password', inputPlaceholder = 'أدخل الرمز السري') => {
+          setDialog({ isOpen: true, type: 'prompt', message, onConfirm, inputType, inputPlaceholder });
+      };
+      const closeDialog = () => setDialog({ isOpen: false, type: 'alert', message: '', onConfirm: null });
+
+      useEffect(() => {
+        document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+        document.documentElement.lang = lang;
+      }, [lang]);
+
+      const handleFileUpload = (e, setter) => {
+        const file = e.target.files[0];
+        if(!file) return;
+        if(file.size > 3 * 1024 * 1024) { showAlert('الحد الأقصى 3 ميجابايت.'); return; }
+        setter(file);
+      };
+
+      useEffect(() => {
+          if (userData) {
+              const sessionData = { ...userData };
+              delete sessionData.password;
+              localStorage.setItem('nexoraSession', JSON.stringify(sessionData));
+          } else {
+              localStorage.removeItem('nexoraSession');
+          }
+      }, [userData]);
+
+      useEffect(() => {
+          localStorage.setItem('nexoraCart', JSON.stringify(cart));
+      }, [cart]);
+
+      useEffect(() => {
+          if (!sessionStorage.getItem('nexoraWelcomeShown')) {
+              setShowWelcomePromo(true);
+              sessionStorage.setItem('nexoraWelcomeShown', 'true');
+          }
+      }, []);
+
+      useEffect(() => {
+        const loadInitialData = async () => {
+           try {
+               const settingsDoc = await db.collection('settings').doc('globals').get();
+               if (settingsDoc.exists) {
+                   const data = settingsDoc.data();
+                   if (data.exchangeRate) { setExchangeRate(data.exchangeRate); setNewExchangeRateInput(data.exchangeRate); }
+                   if (data.bonusTiers) { setBonusTiers(data.bonusTiers); }
+               }
+           } catch (e) { console.error("Error loading settings", e); }
+        };
+
+        const unsubscribeServices = db.collection('services').onSnapshot((snapshot) => {
+           const servs = [];
+           snapshot.forEach(doc => servs.push({ id: doc.id, ...doc.data() }));
+           setServices(servs); setIsFetchingServices(false);
+        });
+
+        const handleHashChange = () => {
+            const hash = window.location.hash;
+            if(hash.includes('admin-gateway')) { setShowAdminLogin(true); } 
+            else if (hash.startsWith('#/cat-')) {
+                const catId = hash.replace('#/cat-', '');
+                const foundCat = defaultCategories.find(c => c.id === catId);
+                if (foundCat) { setActiveCategory(foundCat); setCurrentView('mainHub'); } 
+                else { setCurrentView('mainHub'); setActiveCategory(null); }
+            } else if (hash === '#/login') { setCurrentView('login'); setActiveCategory(null);
+            } else if (hash === '#/register') { setCurrentView('register'); setActiveCategory(null);
+            } else if (hash === '#/about') { setCurrentView('about'); setActiveCategory(null);
+            } else if (hash === '#/terms') { setCurrentView('terms'); setActiveCategory(null);
+            } else if (hash === '#/wallet') { setCurrentView('wallet'); setActiveCategory(null);
+            } else if (hash === '#admin-dashboard') { setCurrentView('adminDashboard'); setShowAdminLogin(false);
+            } else { setCurrentView('mainHub'); setActiveCategory(null); }
+        };
+
+        window.addEventListener('hashchange', handleHashChange);
+        handleHashChange(); 
+        loadInitialData();
+
+        return () => { window.removeEventListener('hashchange', handleHashChange); unsubscribeServices(); };
+      }, []);
+
+      useEffect(() => {
+        if (!showAdminLogin && currentView === 'adminDashboard') {
+            const unsubscribeOrders = db.collection('requests').onSnapshot((snapshot) => {
+                const allTasks = [];
+                snapshot.forEach(doc => allTasks.push({ id: doc.id, ...doc.data() }));
+                allTasks.sort((a, b) => b.timestamp - a.timestamp);
+                
+                if (previousTaskCount.current !== 0 && allTasks.length > previousTaskCount.current) {
+                    setToastMessage('🔔 تنبيه: تم استلام طلب جديد!');
+                    setTimeout(()=>setToastMessage(''), 5000);
+                }
+                previousTaskCount.current = allTasks.length;
+                setAdminTasks(allTasks);
+            });
+            const unsubscribeClients = db.collection('clients').onSnapshot((snapshot) => {
+                const clients = [];
+                snapshot.forEach(doc => clients.push({ id: doc.id, ...doc.data() }));
+                clients.sort((a, b) => b.timestamp - a.timestamp);
+                setAdminClients(clients);
+            });
+            return () => { unsubscribeOrders(); unsubscribeClients(); };
+        }
+      }, [currentView, showAdminLogin]);
+
+      useEffect(() => {
+         if (userData && userData.serialId) {
+             const unsubscribeUserReqs = db.collection('requests').where('serialId', '==', userData.serialId).onSnapshot((snapshot) => {
+                 const reqs = [];
+                 snapshot.forEach(doc => reqs.push({ id: doc.id, ...doc.data() }));
+                 reqs.sort((a, b) => b.timestamp - a.timestamp);
+                 setUserRequests(reqs);
+             });
+             const unsubscribeTrans = db.collection('transactions').where('serialId', '==', userData.serialId).onSnapshot((snapshot) => {
+                 const trans = [];
+                 snapshot.forEach(doc => trans.push({ id: doc.id, ...doc.data() }));
+                 trans.sort((a, b) => b.timestamp - a.timestamp);
+                 setUserTransactions(trans);
+             });
+             const unsubscribeClient = db.collection('clients').doc(userData.serialId).onSnapshot((doc) => {
+                 if(doc.exists) {
+                     setUserData(prev => prev ? {...prev, balance: parseFloat(doc.data().balance) || 0} : null);
+                 }
+             });
+             return () => { unsubscribeUserReqs(); unsubscribeTrans(); unsubscribeClient(); };
+         } else { setUserRequests([]); setUserTransactions([]); }
+      }, [userData ? userData.serialId : null]);
+
+      const changeView = (view, cat = null) => {
+         if (cat) window.location.hash = `/cat-${cat.id}`;
+         else if (view === 'mainHub') window.location.hash = '';
+         else window.location.hash = `#/${view}`;
+      };
+
+      const formatPrice = (usdAmount) => {
+        const val = parseFloat(usdAmount) || 0;
+        if (currency === 'SYP') return (val * exchangeRate).toLocaleString('en-US') + ' ل.س';
+        return '$' + val.toFixed(2);
+      };
+
+      const calculateBonus = (amount) => {
+          const val = parseFloat(amount) || 0;
+          const sortedTiers = [...bonusTiers].sort((a, b) => b.threshold - a.threshold);
+          const matchingTier = sortedTiers.find(tier => val >= tier.threshold);
+          return matchingTier ? parseFloat(matchingTier.bonus) : 0;
+      };
+
+      const generatePDFInvoice = (order) => {
+         const element = document.createElement('div');
+         const isAr = lang === 'ar';
+         element.innerHTML = `
+            <div style="font-family: 'Cairo', sans-serif; direction: ${isAr ? 'rtl' : 'ltr'}; padding: 30px; color: #333; background: #fff; width: 800px; max-width: 100%;">
+               <div style="text-align: center; border-bottom: 3px solid #06b6d4; padding-bottom: 20px; margin-bottom: 30px;">
+                  <h1 style="color: #06b6d4; font-size: 38px; margin: 0; font-weight: 900; letter-spacing: 2px;">NEXORA SYRIA</h1>
+                  <p style="color: #666; font-size: 16px; margin-top: 5px;">فاتورة خدمات رقمية رسمية / Official Digital Service Invoice</p>
+               </div>
+               <table style="width: 100%; border-collapse: collapse; margin-bottom: 30px; font-size: 15px;">
+                  <tr>
+                     <td style="padding: 10px; width: 50%;"><strong>رقم الفاتورة (Invoice ID):</strong><br> ${order.serialId}</td>
+                     <td style="padding: 10px; text-align: ${isAr ? 'left' : 'right'}; width: 50%;"><strong>تاريخ الإصدار (Date):</strong><br> ${order.dateString}</td>
+                  </tr>
+                  <tr>
+                     <td style="padding: 10px; width: 50%;"><strong>اسم العميل (Client Name):</strong><br> ${order.clientName}</td>
+                     <td style="padding: 10px; text-align: ${isAr ? 'left' : 'right'}; width: 50%; color: #10b981;"><strong>الحالة (Status):</strong><br> ${order.status}</td>
+                  </tr>
+               </table>
+               <div style="background-color: #f8f9fa; padding: 25px; border-radius: 12px; border: 1px solid #e5e7eb;">
+                  <h3 style="margin-top: 0; color: #1f2937; border-bottom: 2px solid #e5e7eb; padding-bottom: 15px; font-size: 18px;">تفاصيل الطلب / Order Details</h3>
+                  <div style="white-space: pre-wrap; font-size: 15px; line-height: 1.8; color: #4b5563; margin-top: 15px;">${order.details}</div>
+               </div>
+               <div style="margin-top: 30px; padding-top: 20px; border-top: 2px solid #06b6d4; text-align: ${isAr ? 'left' : 'right'};">
+                  <h2 style="color: #06b6d4; margin: 0; font-size: 28px;">الإجمالي / Total: $${parseFloat(order.total || 0).toFixed(2)}</h2>
+               </div>
+               <div style="margin-top: 50px; text-align: center; color: #9ca3af; font-size: 13px;">
+                  <p>نشكركم لثقتكم بخدماتنا - Thank you for trusting NEXORA SYRIA</p>
+               </div>
+            </div>
+         `;
+         const opt = {
+            margin: 0, filename: `Invoice_${order.serialId}.pdf`, image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff' }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+         };
+         html2pdf().from(element).set(opt).save();
+      };
+
+      const uploadToStorage = async (fileObj) => {
+          try {
+             const fileRef = storage.ref().child(`nexora_receipts/${Date.now()}_${fileObj.name}`);
+             await fileRef.put(fileObj); 
+             return await fileRef.getDownloadURL();
+          } catch(e) { throw new Error("تخزين Firebase مغلق. تأكد من إعدادات Storage Rules."); }
+      };
+
+      const handleExportData = () => {
+         setLoading(true); setToastMessage('جاري تجميع البيانات وتجهيز الملف...');
+         try {
+            let csv = "\uFEFF"; 
+            csv += "--- Clients ---\nID,Name,WhatsApp,Area,Balance(USD),Date\n";
+            adminClients.forEach(c => csv += `${c.serialId},${c.name},${c.whatsapp},${c.area},${c.balance},${c.dateString}\n`);
+            csv += "\n--- Orders ---\nID,Client,Type,Total(USD),Status,Date\n";
+            adminTasks.forEach(t => csv += `${t.id},${t.clientName},${t.type},${t.total},${t.status},${t.dateString}\n`);
+            
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = `NEXORA_Backup_${new Date().toLocaleDateString('en-GB')}.csv`;
+            link.click();
+            setToastMessage('تم تحميل النسخة الاحتياطية بنجاح!');
+         } catch(e) { showAlert('حدث خطأ أثناء تصدير البيانات.'); }
+         setLoading(false); setTimeout(() => setToastMessage(''), 3000);
+      };
+
+      const handleFactoryReset = () => {
+         showPrompt('⚠️ تحذير خطير: سيتم مسح كافة بيانات العملاء، الطلبات، والخدمات. هذا الإجراء نهائي! أدخل الرمز السري للتأكيد:', async (pin) => {
+             const settingsDoc = await db.collection('settings').doc('globals').get();
+             const correctPin = settingsDoc.exists && settingsDoc.data().adminPin ? settingsDoc.data().adminPin : '2026';
+             
+             if (pin !== correctPin) return showAlert('إلغاء الإجراء: الرمز السري غير صحيح.');
+             
+             setLoading(true); setToastMessage('جاري مسح النظام بالكامل... الرجاء عدم إغلاق الصفحة.');
+             try {
+                const collections = ['clients', 'requests', 'transactions', 'services'];
+                for(const col of collections) {
+                   const snapshot = await db.collection(col).get();
+                   const batch = db.batch();
+                   snapshot.docs.forEach(doc => { batch.delete(doc.ref); });
+                   await batch.commit();
+                }
+                setToastMessage('نجاح: تم مسح كافة البيانات واستعادة ضبط المصنع.');
+             } catch(e) { showAlert('خطأ أثناء عملية المسح.'); }
+             setLoading(false); setTimeout(() => setToastMessage(''), 4000);
+         }, 'password', 'أدخل الرمز السري لتأكيد المسح');
+      };
+
+      // --- نظام التسجيل واستعادة الحساب المحدث ---
+      const handleRegister = async (e) => {
+        e.preventDefault(); setLoading(true);
+        try {
+           const fakeEmail = `${registerData.whatsapp}@nexora.sy`;
+           
+           // إنشاء الحساب في Authentication
+           const userCredential = await auth.createUserWithEmailAndPassword(fakeEmail, registerData.password);
+           const firebaseUser = userCredential.user;
+
+           // التحقق من وجود العميل في Firestore
+           const existSnap = await db.collection('clients').where('whatsapp', '==', registerData.whatsapp).get();
+           
+           if (!existSnap.empty) { 
+               // --- سيناريو استعادة الحساب (عند قيام الإدارة بحذفه من Auth) ---
+               const oldDoc = existSnap.docs[0];
+               const clientData = oldDoc.data();
+               
+               await db.collection('clients').doc(clientData.serialId).update({ uid: firebaseUser.uid });
+               
+               setUserData({...clientData, uid: firebaseUser.uid});
+               changeView('mainHub'); 
+               setToastMessage('تم استعادة حسابك وربط بياناتك السابقة بنجاح!');
+           } else {
+               // --- سيناريو التسجيل العادي ---
+               const newSerial = 'NEX-' + Math.floor(10000 + Math.random() * 90000);
+               const newClient = { 
+                   ...registerData, 
+                   serialId: newSerial, balance: 0, timestamp: Date.now(), 
+                   dateString: new Date().toLocaleDateString('ar-SA'),
+                   uid: firebaseUser.uid
+               };
+               
+               delete newClient.password; // عدم حفظ الباسورد إطلاقاً لدواعي الأمان
+               await db.collection('clients').doc(newSerial).set(newClient);
+               
+               setUserData(newClient); 
+               changeView('mainHub'); 
+               setToastMessage('تم تسجيل الحساب بنجاح بآلية الأمان المتقدمة!');
+           }
+        } catch (error) { 
+           if (error.code === 'auth/email-already-in-use') {
+               showAlert('هذا الرقم مسجل مسبقاً. إذا نسيت كلمة المرور، تواصل مع الإدارة لطلب "تصفير الأمان واستعادة الحساب".');
+           } else if (error.code === 'auth/weak-password') {
+               showAlert('كلمة المرور ضعيفة جداً! يجب أن تتكون من 6 أحرف أو أرقام على الأقل.');
+           } else if (error.code === 'auth/operation-not-allowed') {
+               showAlert('خدمة تسجيل الدخول معطلة من قبل الإدارة في Firebase. يرجى تفعيل Email/Password Provider.');
+           } else {
+               showAlert('حدث خطأ أثناء التسجيل: ' + error.message);
+           }
+        }
+        setLoading(false); setTimeout(() => setToastMessage(''), 3000);
+      };
+
+      const handleLoginAction = async (e) => {
+        e.preventDefault(); setLoading(true);
+        const fakeEmail = `${loginInput}@nexora.sy`;
+        
+        try {
+           await auth.signInWithEmailAndPassword(fakeEmail, loginPassword);
+           const waQuery = await db.collection('clients').where('whatsapp', '==', loginInput).get();
+           if (!waQuery.empty) {
+               setUserData(waQuery.docs[0].data());
+               changeView('mainHub'); setToastMessage('أهلاً بك مجدداً!');
+           } else {
+               await auth.signOut();
+               showAlert('عذراً! حسابك موجود في خوادم الأمان ولكن تعذر العثور على ملف بياناتك في قاعدة البيانات (Firestore). يرجى مراجعة الإدارة.');
+           }
+        } catch (error) {
+           if (error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
+               try {
+                   const waQuery = await db.collection('clients').where('whatsapp', '==', loginInput).get();
+                   let userDoc = null; if (!waQuery.empty) userDoc = waQuery.docs[0].data();
+                   if (!userDoc) { showAlert('لم يتم العثور على حساب مرتبط بهذا الرقم.'); setLoading(false); return; }
+                   
+                   const hashedLoginInput = await hashPassword(loginPassword);
+                   if (userDoc.password !== loginPassword && userDoc.password !== hashedLoginInput) { 
+                       showAlert('كلمة المرور غير صحيحة!'); setLoading(false); return; 
+                   }
+                   
+                   const userCredential = await auth.createUserWithEmailAndPassword(fakeEmail, loginPassword);
+                   await db.collection('clients').doc(userDoc.serialId).update({ uid: userCredential.user.uid, password: firebase.firestore.FieldValue.delete() });
+                   
+                   const sessionData = { ...userDoc, uid: userCredential.user.uid };
+                   delete sessionData.password; setUserData(sessionData); 
+                   changeView('mainHub'); setToastMessage('أهلاً بك مجدداً! (تم ترقية أمان حسابك تلقائياً)');
+               } catch (err) {
+                   if (err.code === 'auth/email-already-in-use') showAlert('تعذر الدخول. يرجى طلب "تصفير الأمان" من الإدارة.');
+                   else showAlert('حدث خطأ غير متوقع: ' + err.message);
+               }
+           } else {
+               if (error.code === 'auth/wrong-password' || error.code === 'auth/invalid-credential') showAlert('كلمة المرور غير صحيحة.');
+               else if (error.code === 'auth/too-many-requests') showAlert('تم حظر هذا الحساب مؤقتاً بسبب محاولات دخول فاشلة كثيرة. يرجى المحاولة لاحقاً.');
+               else showAlert('فشل تسجيل الدخول: ' + error.message);
+           }
+        }
+        setLoading(false); setTimeout(() => setToastMessage(''), 3000);
+      };
+
+      const logout = () => {
+        showConfirm('هل أنت متأكد من تسجيل الخروج؟', async () => {
+            await auth.signOut();
+            localStorage.removeItem('nexoraSession'); setUserData(null); setCart([]); changeView('mainHub');
+        });
+      };
+
+      const handleTopUpRequest = async (e) => {
+         e.preventDefault();
+         if (!receiptFile && paymentMethod === 'bank') return showAlert(t('attachReceipt'));
+         if (!topupAmount || parseFloat(topupAmount) <= 0) return showAlert(t('enterAmount'));
+         setLoading(true);
+         try {
+             let receiptUrl = null; 
+             if (receiptFile) receiptUrl = await uploadToStorage(receiptFile);
+             
+             const baseAmt = parseFloat(topupAmount) || 0;
+             const bonusAmt = calculateBonus(baseAmt);
+             const finalTotal = baseAmt + bonusAmt;
+
+             let detailsTxt = `طلب شحن محفظة بقيمة ${baseAmt}$ عبر ${paymentMethod === 'bank' ? 'حوالة/شام كاش' : 'نقدي'}`;
+             if (bonusAmt > 0) {
+                 detailsTxt += `\n🎁 قيمة المكافأة الممنوحة: ${bonusAmt}$`;
+                 detailsTxt += `\n💰 الإجمالي الذي سيضاف للرصيد: ${finalTotal}$`;
+             }
+
+             const reqData = {
+                 serialId: userData.serialId || 'غير-محدد', clientName: userData.name || 'عميل', 
+                 clientWhatsapp: userData.whatsapp || '', clientArea: userData.area || '',
+                 type: 'شحن رصيد محفظة', details: detailsTxt,
+                 total: finalTotal, baseAmount: baseAmt, bonusAmount: bonusAmt,
+                 fileUrl: receiptUrl || null,
+                 status: 'قيد المراجعة ⏳', timestamp: Date.now(), dateString: new Date().toLocaleDateString('ar-SA')
+             };
+             await db.collection('requests').add(reqData);
+             setTopupAmount(''); setReceiptFile(null);
+             setToastMessage('تم استلام طلب الشحن. سيتم إضافة المبلغ مع المكافأة فور تأكيده!');
+         } catch(e) { showAlert('حدث خطأ: ' + e.message); }
+         setLoading(false); setTimeout(() => setToastMessage(''), 4000);
+      };
+
+      const handleAddToCart = (item) => {
+        setCart((prev) => [...prev, item]);
+        const itemName = item[`name_${lang}`] || item.name_ar || item.name || 'خدمة';
+        setToastMessage(`تمت إضافة "${itemName}" للسلة`); setTimeout(() => setToastMessage(''), 3000);
+      };
+
+      const handleRequestService = (item) => {
+         if (!userData) { showAlert('يجب تسجيل الدخول لطلب الخدمات.'); changeView('login'); } 
+         else { handleAddToCart(item); }
+      };
+
+      const handleCheckoutFromWallet = async () => {
+          const rawTotal = cart.reduce((sum, item) => sum + (parseFloat(item.price) || 0), 0);
+          const percentVal = parseFloat(discountInfo.percent) || 0;
+          const finalTotal = discountInfo.active ? rawTotal - (rawTotal * (percentVal / 100)) : rawTotal;
+
+          setLoading(true);
+          try {
+              const clientRef = db.collection('clients').doc(userData.serialId);
+              let newReqId = '';
+
+              await db.runTransaction(async (transaction) => {
+                  const clientDoc = await transaction.get(clientRef);
+                  if (!clientDoc.exists) throw new Error("بيانات العميل غير متوفرة");
+
+                  const currentBalance = parseFloat(clientDoc.data().balance) || 0;
+                  if (currentBalance < finalTotal) throw new Error("INSUFFICIENT_FUNDS");
+
+                  transaction.update(clientRef, { balance: currentBalance - finalTotal });
+
+                  let detailsText = `[دفع مباشر من المحفظة الذكية]\n\n`;
+                  cart.forEach(item => { detailsText += `- ${item.name_ar || item.name || 'خدمة غير محددة'} (${parseFloat(item.price) || 0} $)\n`; });
+                  
+                  const reqRef = db.collection('requests').doc();
+                  newReqId = reqRef.id;
+                  const transRef = db.collection('transactions').doc();
+
+                  transaction.set(reqRef, {
+                      serialId: userData.serialId || 'غير-محدد', clientName: userData.name || 'عميل', 
+                      clientWhatsapp: userData.whatsapp || '', clientArea: userData.area || '',
+                      type: 'طلب متجر وخدمات', details: detailsText, total: finalTotal || 0, fileUrl: null,
+                      status: 'قيد المراجعة ⏳', timestamp: Date.now(), dateString: new Date().toLocaleDateString('ar-SA')
+                  });
+
+                  transaction.set(transRef, {
+                      serialId: userData.serialId, type: 'سداد 🔴', amount: finalTotal, desc: `سداد قيمة طلب (${newReqId.substring(0,6)})`,
+                      timestamp: Date.now(), dateString: new Date().toLocaleString('ar-SA')
+                  });
+              });
+
+              setIsCartOpen(false); setCart([]); setDiscountInfo({ active: false, percent: 0 });
+              setToastMessage('تم خصم المبلغ وتأكيد الطلب بنجاح تام!');
+          } catch(e) { 
+              if (e.message === "INSUFFICIENT_FUNDS") showAlert(t('insufficient'));
+              else showAlert('حدث خطأ أمني أثناء إتمام الطلب: ' + e.message); 
+          }
+          setLoading(false); setTimeout(() => setToastMessage(''), 4000);
+      };
+
+      const handleAdminLogin = async (e) => {
+        e.preventDefault(); setLoading(true);
+        try {
+            const settingsDoc = await db.collection('settings').doc('globals').get();
+            const correctPin = settingsDoc.exists && settingsDoc.data().adminPin ? settingsDoc.data().adminPin : '2026';
+            if (adminPin === correctPin) { setShowAdminLogin(false); setCurrentView('adminDashboard'); window.location.hash = '#admin-dashboard'; } 
+            else { showAlert('الرمز السري غير صحيح.'); }
+        } catch(error) { showAlert('حدث خطأ في الاتصال بالخادم.'); }
+        setLoading(false);
+      };
+
+      const handleUpdateClientData = async (e) => {
+          e.preventDefault(); if(!editingClient) return; setLoading(true);
+          try {
+             await db.collection('clients').doc(editingClient.serialId).update({
+                 name: editingClient.name, whatsapp: editingClient.whatsapp, area: editingClient.area, balance: parseFloat(editingClient.balance) || 0
+             });
+             setToastMessage('تم تحديث بيانات العميل بنجاح!'); setEditingClient(null);
+          } catch(error) { showAlert('حدث خطأ أثناء تحديث العميل.'); }
+          setLoading(false); setTimeout(() => setToastMessage(''), 3000);
+      };
+
+      const handleStatusChange = async (task, newStatus) => {
+        if (task.status === newStatus) return;
+        const processChange = async (noteVal) => {
+            try {
+               const clientRef = db.collection('clients').doc(task.serialId);
+               const reqRef = db.collection('requests').doc(task.id);
+               const taskTotal = parseFloat(task.total) || 0;
+
+               if ((task.type || '').includes('شحن') && newStatus.includes('مكتمل') && !(task.status || '').includes('مكتمل')) {
+                   await clientRef.update({ balance: firebase.firestore.FieldValue.increment(taskTotal) });
+                   await db.collection('transactions').add({ serialId: task.serialId, type: 'إيداع 🟢', amount: taskTotal, desc: `شحن رصيد معتمد (${task.id.substring(0,6)})`, timestamp: Date.now(), dateString: new Date().toLocaleString('ar-SA') });
+               } else if (!(task.type || '').includes('شحن') && newStatus.includes('مرفوض') && !(task.status || '').includes('مرفوض')) {
+                   if (taskTotal > 0) {
+                       await clientRef.update({ balance: firebase.firestore.FieldValue.increment(taskTotal) });
+                       await db.collection('transactions').add({ serialId: task.serialId, type: 'استرداد 🔵', amount: taskTotal, desc: `استرداد لطلب مرفوض (${task.id.substring(0,6)})`, timestamp: Date.now(), dateString: new Date().toLocaleString('ar-SA') });
+                   }
+               }
+               
+               const updatePayload = { status: newStatus };
+               if (noteVal !== null && noteVal !== undefined && noteVal.trim() !== '') updatePayload.adminNote = noteVal.trim();
+
+               await reqRef.update(updatePayload);
+               setToastMessage('تم تحديث الحالة بنجاح'); setTimeout(()=>setToastMessage(''), 2000);
+            } catch(e) { showAlert('حدث خطأ في تحديث الحالة أو الرصيد: ' + e.message); }
+        };
+
+        if (newStatus.includes('مرفوض') || newStatus.includes('تم الحل') || newStatus.includes('مكتمل')) {
+            showPrompt(`تغيير الحالة إلى "${newStatus}". هل تود إضافة ملاحظة للعميل؟`, (note) => { processChange(note); }, 'text', 'أدخل الملاحظة / سبب الرفض (اختياري)');
+        } else { showConfirm(`تغيير حالة الطلب إلى "${newStatus}"؟`, () => processChange('')); }
+      };
+
+      const handleAddOrUpdateItem = async () => {
+        if (!newItem.name_ar || !newItem.categoryId) return showAlert('يرجى إدخال الاسم باللغة العربية على الأقل');
+        setLoading(true);
+        try {
+            const serviceData = {
+                categoryId: newItem.categoryId, 
+                name_ar: newItem.name_ar, name_en: newItem.name_en || newItem.name_ar, name_tr: newItem.name_tr || newItem.name_ar,
+                desc_ar: newItem.desc_ar, desc_en: newItem.desc_en || newItem.desc_ar, desc_tr: newItem.desc_tr || newItem.desc_ar, 
+                name: newItem.name_ar, desc: newItem.desc_ar,
+                price: parseFloat(newItem.price) || 0, updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            };
+            if (editingServiceId) {
+                await db.collection('services').doc(editingServiceId).update(serviceData); setToastMessage('تم التحديث بنجاح!');
+            } else {
+                serviceData.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+                await db.collection('services').add(serviceData); setToastMessage('تمت الإضافة بنجاح!');
+            }
+            setNewItem({ name_ar: '', name_en: '', name_tr: '', desc_ar: '', desc_en: '', desc_tr: '', price: '', categoryId: 'CAT-001' }); 
+            setEditingServiceId(null); setActiveLangTab('ar');
+        } catch(e) { showAlert('حدث خطأ أثناء الحفظ.'); }
+        setLoading(false); setTimeout(() => setToastMessage(''), 3000);
+      };
+
+      const handleEditClick = (srv) => {
+         setNewItem({ 
+           name_ar: srv.name_ar || srv.name || '', name_en: srv.name_en || '', name_tr: srv.name_tr || '',
+           desc_ar: srv.desc_ar || srv.desc || '', desc_en: srv.desc_en || '', desc_tr: srv.desc_tr || '',
+           price: parseFloat(srv.price) || 0, categoryId: srv.categoryId 
+         });
+         setEditingServiceId(srv.id); setActiveLangTab('ar');
+         const target = document.getElementById('service-form'); if(target) target.scrollIntoView({ behavior: 'smooth' });
+      };
+
+      const handleDeleteItem = async (id) => {
+        showConfirm('تأكيد الحذف نهائياً؟', async () => {
+            setLoading(true); await db.collection('services').doc(id).delete();
+            setToastMessage('تم الحذف بنجاح!'); setLoading(false); setTimeout(() => setToastMessage(''), 3000);
+        });
+      };
+
+      const handleUpdateExchangeRate = async () => {
+        if (!newExchangeRateInput) return showAlert('يرجى إدخال سعر الصرف'); setLoading(true);
+        await db.collection('settings').doc('globals').set({ exchangeRate: parseFloat(newExchangeRateInput) || 15000 }, { merge: true });
+        setExchangeRate(parseFloat(newExchangeRateInput) || 15000); setToastMessage('تم تحديث سعر الصرف عالمياً!');
+        setLoading(false); setTimeout(() => setToastMessage(''), 3000);
+      };
+
+      const handleSaveBonusTiers = async () => {
+        setLoading(true);
+        await db.collection('settings').doc('globals').set({ bonusTiers: bonusTiers }, { merge: true });
+        setToastMessage('تم تحديث عروض الشحن والمكافآت بنجاح!');
+        setLoading(false); setTimeout(() => setToastMessage(''), 3000);
+      };
+
+      const customStyles = `
+        * { font-family: 'Cairo', sans-serif; }
+        .tech-animated-bg {
+           position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -2;
+           background-color: #050B14;
+           background-image: 
+             linear-gradient(rgba(6, 182, 212, 0.05) 1px, transparent 1px),
+             linear-gradient(90deg, rgba(6, 182, 212, 0.05) 1px, transparent 1px);
+           background-size: 50px 50px;
+           animation: techGridMove 15s linear infinite;
+        }
+        @keyframes techGridMove { 0% { background-position: 0 0; } 100% { background-position: 50px 50px; } }
+        .glowing-orb {
+           position: fixed; top: 10%; right: 20%; width: 400px; height: 400px; border-radius: 50%;
+           background: radial-gradient(circle, rgba(168, 85, 247, 0.1) 0%, transparent 70%);
+           animation: floatOrb 10s ease-in-out infinite alternate; z-index: -1; pointer-events: none;
+        }
+        .glowing-orb-2 {
+           position: fixed; bottom: 10%; left: 10%; width: 600px; height: 600px; border-radius: 50%;
+           background: radial-gradient(circle, rgba(6, 182, 212, 0.05) 0%, transparent 70%);
+           animation: floatOrb2 15s ease-in-out infinite alternate; z-index: -1; pointer-events: none;
+        }
+        @keyframes floatOrb { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(50px, 50px) scale(1.1); } }
+        @keyframes floatOrb2 { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(-50px, -50px) scale(1.2); } }
+
+        .glass-card { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 24px; transition: all 0.3s ease; }
+        .glass-card:hover { box-shadow: 0 0 25px rgba(34, 211, 238, 0.15); border-color: rgba(34, 211, 238, 0.3); transform: translateY(-3px); }
+        .glass-input { background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255, 255, 255, 0.1); color: white; transition: all 0.3s; }
+        .glass-input:focus { outline: none; border-color: #06b6d4; box-shadow: 0 0 15px rgba(6, 182, 212, 0.3); background: rgba(0, 0, 0, 0.6); }
+        .btn-cyan { background: linear-gradient(135deg, #06b6d4, #3b82f6); box-shadow: 0 0 15px rgba(6, 182, 212, 0.4); border: none; color: white; }
+        .btn-cyan:hover { box-shadow: 0 0 25px rgba(6, 182, 212, 0.6); transform: scale(1.02); }
+        .scrollbar-hide::-webkit-scrollbar { display: none; } .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+      `;
+
+      const getIconComponent = (iconName, className) => {
+         switch(iconName) { case 'Code': return <CodeIcon className={className}/>; case 'Headphones': return <HeadphonesIcon className={className}/>; case 'FileText': return <FileTextIcon className={className}/>; case 'PenTool': return <PenToolIcon className={className}/>; case 'Megaphone': return <MegaphoneIcon className={className}/>; case 'ShieldCheck': return <ShieldCheckIcon className={className}/>; case 'Activity': return <ActivityIcon className={className}/>; default: return <ShoppingBagIcon className={className}/>; }
+      };
+
+      const getColorClasses = (colorName) => {
+         const colors = { blue: 'text-blue-400 bg-blue-500/10 border-blue-500/30 group-hover:border-blue-400', green: 'text-green-400 bg-green-500/10 border-green-500/30 group-hover:border-green-400', orange: 'text-orange-400 bg-orange-500/10 border-orange-500/30 group-hover:border-orange-400', purple: 'text-purple-400 bg-purple-500/10 border-purple-500/30 group-hover:border-purple-400', cyan: 'text-cyan-400 bg-cyan-500/10 border-cyan-500/30 group-hover:border-cyan-400', indigo: 'text-indigo-400 bg-indigo-500/10 border-indigo-500/30 group-hover:border-indigo-400', yellow: 'text-yellow-400 bg-yellow-500/10 border-yellow-500/30 group-hover:border-yellow-400' };
+         return colors[colorName] || colors.blue;
+      };
+
+      const renderWelcomePromo = () => {
+         if (!showWelcomePromo) return null;
+         return (
+            <div className="fixed inset-0 z-[999999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-[fadeIn_0.5s_ease-out]">
+               <div className="glass-card w-full max-w-md p-8 text-center border-[#06b6d4]/50 shadow-[0_0_50px_rgba(6,182,212,0.3)] relative overflow-hidden">
+                  <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-[#06b6d4] to-purple-500"></div>
+                  <img src={LOGO_BASE64} alt="Logo" className="w-20 h-20 mx-auto mb-6 drop-shadow-[0_0_15px_rgba(6,182,212,0.8)] animate-pulse" />
+                  <h2 className="text-3xl font-black text-white mb-4">{t('promoTitle')} <span className="text-[#06b6d4]">NEXORA</span></h2>
+                  <p className="text-gray-300 font-semibold leading-relaxed mb-8 text-lg">
+                     {t('promoMsg1')}<br/>{t('promoMsg2')}
+                  </p>
+                  <button onClick={() => setShowWelcomePromo(false)} className="btn-cyan w-full py-4 rounded-xl text-lg font-bold shadow-lg">{t('promoBtn')}</button>
+               </div>
+            </div>
+         );
+      }
+
+      const renderDialog = () => {
+        if (!dialog.isOpen) return null;
+        return (
+          <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-[fadeIn_0.2s_ease-out]">
+             <div className="glass-card w-full max-w-sm p-6 text-center border-[#06b6d4]/50 shadow-[0_0_30px_rgba(6,182,212,0.2)]">
+                {dialog.type === 'alert' || dialog.type === 'prompt' ? <ActivityIcon className="w-12 h-12 text-[#06b6d4] mx-auto mb-4" /> : <ShieldCheckIcon className="w-12 h-12 text-blue-400 mx-auto mb-4" />}
+                <h3 className="text-lg font-bold mb-6 text-white leading-relaxed">{dialog.message}</h3>
+                {dialog.type === 'prompt' && <input type={dialog.inputType || 'password'} id="prompt-input-val" className="glass-input w-full rounded-xl py-3 px-4 mb-6 text-center text-lg font-bold" placeholder={dialog.inputPlaceholder || 'أدخل الرمز السري'} />}
+                <div className="flex gap-3 justify-center">
+                   {(dialog.type === 'confirm' || dialog.type === 'prompt') && (
+                     <button onClick={() => { const inputEl = document.getElementById('prompt-input-val'); const val = dialog.type === 'prompt' ? (inputEl ? inputEl.value : null) : null; dialog.onConfirm(val); closeDialog(); }} className="px-6 py-2 rounded-xl bg-blue-500/20 text-blue-400 font-bold hover:bg-blue-500/30 transition-colors border border-blue-500/30">تأكيد</button>
+                   )}
+                   <button onClick={closeDialog} className="px-6 py-2 rounded-xl border border-white/10 text-gray-300 hover:bg-white/5 transition-colors font-bold">{dialog.type === 'alert' ? 'حسناً' : 'إلغاء'}</button>
+                </div>
+             </div>
+          </div>
+        );
+      };
+
+      const renderLogin = () => (
+        <div className="min-h-screen flex flex-col items-center justify-center p-4 relative z-10 animate-[fadeIn_0.5s_ease-out]">
+          <button onClick={() => changeView('mainHub')} className={`absolute top-6 ${lang==='ar'?'right-6':'left-6'} text-gray-400 hover:text-white font-bold flex items-center gap-2`}><ArrowRightIcon className={`w-5 h-5 ${lang!=='ar'&&'rotate-180'}`}/> {t('backToPlat')}</button>
+          <div className="text-center mb-8 flex flex-col items-center justify-center select-none">
+             <img src={LOGO_BASE64} alt="NEXORA Logo" className="w-24 h-24 object-contain drop-shadow-[0_0_15px_rgba(6,182,212,0.6)] mb-4" />
+             <h1 className="text-5xl font-black tracking-widest mb-2"><span className="text-white">NEXORA</span> <span className="text-[#06b6d4]">SYRIA</span></h1>
+          </div>
+          <div className="glass-card w-full max-w-md p-8 border-[#06b6d4]/20">
+            <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-2"><LockIcon className="w-6 h-6 text-[#06b6d4]"/> {t('loginTitle')}</h2>
+            <form onSubmit={handleLoginAction} className="space-y-4">
+              <div className="relative"><UserIcon className={`absolute ${lang==='ar'?'right-4':'left-4'} top-4 w-5 h-5 text-gray-500`} /><input required type="text" placeholder={t('phoneNum')} className={`glass-input w-full rounded-xl py-3 ${lang==='ar'?'pr-12 pl-4':'pl-12 pr-4'} text-sm font-bold`} value={loginInput} onChange={e => setLoginInput(e.target.value)} /></div>
+              <div className="relative"><LockIcon className={`absolute ${lang==='ar'?'right-4':'left-4'} top-4 w-5 h-5 text-gray-500`} /><input required type="password" placeholder={t('pass')} className={`glass-input w-full rounded-xl py-3 ${lang==='ar'?'pr-12 pl-4':'pl-12 pr-4'} text-sm font-bold`} value={loginPassword} onChange={e => setLoginPassword(e.target.value)} /></div>
+              
+              {/* زر استعادة كلمة المرور */}
+              <div className="flex justify-end mt-1">
+                 <button type="button" onClick={() => showAlert('لاستعادة حسابك، يرجى التواصل مع إدارة المنصة وطلب "تصفير الأمان". بعد ذلك ستتمكن من عمل "إنشاء حساب جديد" بنفس رقمك وسيتم استعادة رصيدك وطلباتك تلقائياً.')} className="text-[#06b6d4] text-xs font-bold hover:underline transition-colors">نسيت كلمة المرور؟</button>
+              </div>
+
+              <button type="submit" disabled={loading} className="btn-cyan w-full rounded-xl py-3 text-lg font-bold flex justify-center items-center mt-6">{loading ? t('verifying') : t('loginBtn')}</button>
+            </form>
+            <div className="mt-8 text-center border-t border-white/10 pt-4"><p className="text-gray-400 text-sm">{t('noAccount')} <button onClick={() => changeView('register')} className="text-[#06b6d4] font-bold hover:underline">{t('createAcc')}</button></p></div>
+          </div>
+        </div>
+      );
+
+      const renderRegister = () => (
+        <div className="min-h-screen flex flex-col items-center justify-center p-4 relative z-10 animate-[fadeIn_0.5s_ease-out]">
+          <button onClick={() => changeView('mainHub')} className={`absolute top-6 ${lang==='ar'?'right-6':'left-6'} text-gray-400 hover:text-white font-bold flex items-center gap-2`}><ArrowRightIcon className={`w-5 h-5 ${lang!=='ar'&&'rotate-180'}`}/> {t('backToPlat')}</button>
+          <div className="text-center mb-8 flex flex-col items-center select-none">
+             <img src={LOGO_BASE64} alt="NEXORA Logo" className="w-16 h-16 object-contain drop-shadow-[0_0_10px_rgba(6,182,212,0.6)] mb-2" />
+             <h1 className="text-4xl font-black tracking-widest mb-2"><span className="text-white">NEXORA</span> <span className="text-[#06b6d4]">SYRIA</span></h1>
+          </div>
+          <div className="glass-card w-full max-w-md p-8 border-[#06b6d4]/20">
+            <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-2"><UserIcon className="w-6 h-6 text-[#06b6d4]"/> {t('createAcc')}</h2>
+            <form onSubmit={handleRegister} className="space-y-4">
+              <div className="relative"><UserIcon className={`absolute ${lang==='ar'?'right-4':'left-4'} top-4 w-5 h-5 text-gray-500`} /><input required type="text" placeholder={t('fullName')} className={`glass-input w-full rounded-xl py-3 ${lang==='ar'?'pr-12 pl-4':'pl-12 pr-4'} text-sm font-bold`} value={registerData.name} onChange={e => setRegisterData({...registerData, name: e.target.value})} /></div>
+              <div className="relative"><PhoneIcon className={`absolute ${lang==='ar'?'right-4':'left-4'} top-4 w-5 h-5 text-gray-500`} /><input required type="tel" placeholder={t('whatsapp')} className={`glass-input w-full rounded-xl py-3 ${lang==='ar'?'pr-12 pl-4':'pl-12 pr-4'} text-sm font-bold`} value={registerData.whatsapp} onChange={e => setRegisterData({...registerData, whatsapp: e.target.value})} /></div>
+              <div className="relative"><MapPinIcon className={`absolute ${lang==='ar'?'right-4':'left-4'} top-4 w-5 h-5 text-gray-500`} /><input required type="text" placeholder={t('area')} className={`glass-input w-full rounded-xl py-3 ${lang==='ar'?'pr-12 pl-4':'pl-12 pr-4'} text-sm font-bold`} value={registerData.area} onChange={e => setRegisterData({...registerData, area: e.target.value})} /></div>
+              <div className="relative"><LockIcon className={`absolute ${lang==='ar'?'right-4':'left-4'} top-4 w-5 h-5 text-gray-500`} /><input required type="password" placeholder={t('choosePass')} className={`glass-input w-full rounded-xl py-3 ${lang==='ar'?'pr-12 pl-4':'pl-12 pr-4'} text-sm font-bold`} value={registerData.password} onChange={e => setRegisterData({...registerData, password: e.target.value})} /></div>
+              <button type="submit" disabled={loading} className="btn-cyan w-full rounded-xl py-3 text-lg font-bold mt-6">{t('regBtn')}</button>
+            </form>
+            <div className="mt-6 text-center border-t border-white/10 pt-4"><p className="text-gray-400 text-sm">{t('haveAcc')} <button onClick={() => changeView('login')} className="text-[#06b6d4] font-bold hover:underline">{t('loginHere')}</button></p></div>
+          </div>
+        </div>
+      );
+
+      const renderAbout = () => (
+         <div className="min-h-screen max-w-4xl mx-auto p-4 md:p-8 pt-12 relative z-10 animate-[fadeIn_0.3s_ease-out]">
+            <button onClick={() => changeView('mainHub')} className={`mb-8 flex items-center gap-2 text-gray-400 hover:text-white font-bold transition-colors`}><ArrowRightIcon className={`w-5 h-5 ${lang!=='ar'&&'rotate-180'}`} /> {t('backToPlat')}</button>
+            <div className="glass-card p-10 border-t-4 border-t-[#06b6d4]">
+               <div className="flex justify-center mb-8"><div className="p-5 rounded-3xl bg-[#06b6d4]/10 border border-[#06b6d4]/30 shadow-[0_0_30px_rgba(6,182,212,0.2)]"><InfoIcon className="w-16 h-16 text-[#06b6d4]" /></div></div>
+               <h1 className="text-4xl font-black text-center text-white mb-6">{t('aboutTitle')}</h1>
+               <div className="space-y-6 text-gray-300 font-semibold leading-loose text-lg text-center"><p>{t('aboutDesc1')}</p><p>{t('aboutDesc2')}</p></div>
+            </div>
+         </div>
+      );
+
+      const renderTerms = () => (
+         <div className="min-h-screen max-w-4xl mx-auto p-4 md:p-8 pt-12 relative z-10 animate-[fadeIn_0.3s_ease-out]">
+            <button onClick={() => changeView('mainHub')} className={`mb-8 flex items-center gap-2 text-gray-400 hover:text-white font-bold transition-colors`}><ArrowRightIcon className={`w-5 h-5 ${lang!=='ar'&&'rotate-180'}`} /> {t('backToPlat')}</button>
+            <div className="glass-card p-10 border-t-4 border-t-purple-500">
+               <div className="flex items-center gap-4 mb-8 pb-4 border-b border-white/10"><FileTextIcon className="w-10 h-10 text-purple-400" /><h1 className="text-3xl font-black text-white">{t('termsTitle')}</h1></div>
+               <div className="space-y-6 text-gray-300 font-semibold leading-relaxed">
+                  <div><h3 className="text-xl font-bold text-purple-400 mb-2">1. {t('t1')}</h3><p>{t('t1d')}</p></div>
+                  <div><h3 className="text-xl font-bold text-purple-400 mb-2">2. {t('t2')}</h3><p>{t('t2d')}</p></div>
+                  <div><h3 className="text-xl font-bold text-purple-400 mb-2">3. {t('t3')}</h3><p>{t('t3d')}</p></div>
+               </div>
+            </div>
+         </div>
+      );
+
+      const renderWallet = () => {
+         const currentBonus = calculateBonus(topupAmount);
+         const expectedTotal = parseFloat(topupAmount || 0) + currentBonus;
+
+         return (
+            <div className="min-h-screen max-w-6xl mx-auto p-4 md:p-8 pt-12 relative z-10 animate-[fadeIn_0.3s_ease-out]">
+               <button onClick={() => changeView('mainHub')} className={`mb-8 flex items-center gap-2 text-gray-400 hover:text-white font-bold transition-colors`}><ArrowRightIcon className={`w-5 h-5 ${lang!=='ar'&&'rotate-180'}`} /> {t('backToPlat')}</button>
+               <h2 className="text-4xl font-black text-white mb-8 border-b border-white/10 pb-4 flex items-center gap-3"><WalletIcon className="text-emerald-400 w-10 h-10"/> {t('wallet')}</h2>
+               
+               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div className="space-y-8">
+                     <div className="glass-card p-8 bg-gradient-to-br from-emerald-900/40 to-transparent border-emerald-500/50 shadow-[0_0_40px_rgba(16,185,129,0.15)] relative overflow-hidden">
+                        <div className="absolute top-0 left-0 w-full h-1 bg-emerald-500"></div>
+                        <p className="text-emerald-200 font-bold mb-2">{t('balance')}</p>
+                        <h3 className="text-5xl font-black text-white tracking-wider" dir="ltr">{formatPrice(userData.balance || 0)}</h3>
+                     </div>
+
+                     <div className="glass-card p-6 border-t-4 border-t-[#06b6d4]">
+                        <h3 className="text-xl font-bold text-white mb-6">{t('topup')}</h3>
+                        
+                        <div className="mb-6 p-4 rounded-xl bg-purple-500/10 border border-purple-500/30">
+                           <h4 className="text-purple-400 font-bold text-sm mb-2 flex items-center gap-2"><GiftIcon className="w-5 h-5" /> {t('exclusiveOffers')}</h4>
+                           <ul className="text-gray-300 text-xs space-y-1 font-semibold">
+                              {bonusTiers.sort((a,b)=>a.threshold-b.threshold).map((tier, i) => (
+                                 <li key={i}>• {t('topupGet')} <span className="text-white font-bold">${tier.threshold}</span> {t('getBonus')} <span className="text-green-400 font-bold">${tier.bonus} {t('freeBonus')}</span></li>
+                              ))}
+                           </ul>
+                        </div>
+
+                        <form onSubmit={handleTopUpRequest} className="space-y-4">
+                           <div>
+                              <label className="text-xs text-gray-400 font-bold mb-2 block">{t('payMethod')}</label>
+                              <div className="flex gap-2">
+                                 <button type="button" onClick={()=>setPaymentMethod('bank')} className={`flex-1 py-3 rounded-xl border text-sm font-bold transition-colors ${paymentMethod === 'bank' ? 'bg-[#06b6d4]/20 border-[#06b6d4] text-[#06b6d4]' : 'border-white/10 text-gray-400 hover:bg-white/5'}`}>{t('bankTransfer')}</button>
+                                 <button type="button" onClick={()=>setPaymentMethod('cash')} className={`flex-1 py-3 rounded-xl border text-sm font-bold transition-colors ${paymentMethod === 'cash' ? 'bg-[#06b6d4]/20 border-[#06b6d4] text-[#06b6d4]' : 'border-white/10 text-gray-400 hover:bg-white/5'}`}>{t('cashPay')}</button>
+                              </div>
+                           </div>
+                           <div className="relative">
+                              <DollarSignIcon className={`absolute ${lang==='ar'?'right-4':'left-4'} top-4 w-5 h-5 text-gray-500`} />
+                              <input required type="number" min="1" step="0.01" placeholder={t('enterAmount')} className={`glass-input w-full rounded-xl py-3 ${lang==='ar'?'pr-12 pl-4':'pl-12 pr-4'} text-lg font-black text-[#06b6d4]`} value={topupAmount} onChange={e => setTopupAmount(e.target.value)} />
+                           </div>
+                           
+                           {topupAmount > 0 && currentBonus > 0 && (
+                              <div className="bg-green-500/10 border border-green-500/30 rounded-xl p-3 text-center animate-[fadeIn_0.3s_ease-out]">
+                                 <p className="text-green-400 text-sm font-bold">{t('congrats')} <span className="text-white text-lg">${currentBonus}</span> {t('extraFree')}</p>
+                                 <p className="text-xs text-gray-400 mt-1">{t('expectedTotal')} <span className="text-white font-bold">${expectedTotal}</span></p>
+                              </div>
+                           )}
+
+                           {paymentMethod === 'bank' && (
+                              <label className="block w-full border-2 border-dashed border-[#06b6d4]/40 rounded-xl p-4 text-center cursor-pointer hover:bg-[#06b6d4]/10 transition-colors">
+                                 <UploadCloudIcon className="w-6 h-6 text-[#06b6d4] mx-auto mb-2" />
+                                 <span className="text-xs font-bold text-[#06b6d4]">{receiptFile ? receiptFile.name : t('attachBtn')}</span>
+                                 <input type="file" className="hidden" accept="image/*,.pdf" onChange={(e) => handleFileUpload(e, setReceiptFile)} />
+                              </label>
+                           )}
+                           <button type="submit" disabled={loading} className="btn-cyan w-full rounded-xl py-3 text-sm font-bold">{loading ? t('processing') : t('reqTopup')}</button>
+                        </form>
+                     </div>
+                  </div>
+
+                  <div className="glass-card p-6 border-[#06b6d4]/20 flex flex-col max-h-[750px]">
+                     <h3 className="text-xl font-bold text-white mb-6 pb-4 border-b border-white/10 flex items-center gap-2"><ActivityIcon className="text-purple-400 w-5 h-5"/> {t('transHistory')}</h3>
+                     <div className="flex-1 overflow-y-auto scrollbar-hide space-y-3">
+                        {userTransactions.length === 0 ? <p className="text-center text-gray-500 py-10 font-bold border border-dashed border-gray-700 rounded-xl">{t('noTrans')}</p> : userTransactions.map((tr, idx) => (
+                           <div key={idx} className="bg-black/30 p-4 rounded-xl border border-white/5 flex justify-between items-center">
+                              <div><p className="text-xs text-gray-400 mb-1">{tr.dateString}</p><p className="text-sm font-bold text-white">{tr.desc}</p></div>
+                              <div className="text-left">
+                                 <p className="text-xs mb-1 font-bold">{tr.type.includes('إيداع') || tr.type.includes('استرداد') ? t('deposit') : t('withdraw')}</p>
+                                 <p className={`text-lg font-black ${tr.type.includes('سداد') ? 'text-red-400' : 'text-emerald-400'}`} dir="ltr">{tr.type.includes('سداد') ? '-' : '+'}${parseFloat(tr.amount).toFixed(2)}</p>
+                              </div>
+                           </div>
+                        ))}
+                     </div>
+                  </div>
+               </div>
+            </div>
+         );
+      };
+
+      const renderMainHub = () => (
+        <div className="min-h-screen max-w-6xl mx-auto p-4 md:p-8 pt-12 relative z-10 animate-[fadeIn_0.5s_ease-out] flex flex-col justify-between">
+          <div>
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-6">
+               <div className="flex items-center gap-4">
+                  <img src={LOGO_BASE64} alt="Logo" className="w-14 h-14 object-contain drop-shadow-[0_0_10px_rgba(6,182,212,0.8)]" />
+                  <div>
+                     {userData ? (
+                        <React.Fragment>
+                           <h2 className="text-3xl font-black text-white mb-1">{t('welcome')} <span className="text-[#06b6d4]">{userData.name}</span></h2>
+                           <div className="flex items-center gap-3 text-gray-400 text-xs font-bold"><ShieldCheckIcon className="w-3 h-3 text-green-400" /> {t('id')} {userData.serialId}</div>
+                        </React.Fragment>
+                     ) : ( <h2 className="text-3xl font-black text-white">NEXORA <span className="text-[#06b6d4]">PLATFORM</span></h2> )}
+                  </div>
+               </div>
+               
+               <div className="flex items-center gap-3 flex-wrap">
+                  <div className="glass-card p-1 flex bg-black/50 border-white/10 rounded-full">
+                     <button onClick={()=>setLang('ar')} className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all ${lang==='ar'?'bg-[#06b6d4] text-black':'text-gray-400'}`}>AR</button>
+                     <button onClick={()=>setLang('en')} className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all ${lang==='en'?'bg-[#06b6d4] text-black':'text-gray-400'}`}>EN</button>
+                     <button onClick={()=>setLang('tr')} className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all ${lang==='tr'?'bg-[#06b6d4] text-black':'text-gray-400'}`}>TR</button>
+                  </div>
+                  <div className="glass-card p-1 flex bg-black/50 border-white/10 rounded-full">
+                     <button onClick={()=>setCurrency('USD')} className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${currency==='USD'?'bg-[#06b6d4] text-black':'text-gray-400'}`}>$</button>
+                     <button onClick={()=>setCurrency('SYP')} className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${currency==='SYP'?'bg-[#06b6d4] text-black':'text-gray-400'}`}>ل.س</button>
+                  </div>
+                  {userData ? (
+                     <React.Fragment>
+                        <button onClick={()=>changeView('wallet')} className="glass-card px-4 py-2 flex items-center gap-2 text-emerald-400 font-bold hover:bg-emerald-500/10 transition-colors">
+                           <WalletIcon className="w-5 h-5"/>
+                           <span dir="ltr">{formatPrice(userData.balance || 0)}</span>
+                        </button>
+                        <button onClick={()=>setIsCartOpen(true)} className="glass-card px-4 py-2 flex items-center gap-2 text-[#06b6d4] font-bold hover:bg-[#06b6d4]/10 relative"><ShoppingBagIcon className="w-5 h-5"/> {cart.length > 0 && <span className="absolute -top-2 -right-2 bg-red-500 text-white w-5 h-5 rounded-full flex items-center justify-center text-[10px]">{cart.length}</span>}</button>
+                        <button onClick={logout} className="glass-card px-4 py-2 text-sm font-bold text-red-400 hover:bg-red-500/10">{t('logout')}</button>
+                     </React.Fragment>
+                  ) : ( <button onClick={() => changeView('login')} className="btn-cyan px-6 py-2 rounded-xl text-sm font-bold shadow-lg flex items-center gap-2"><UserIcon className="w-4 h-4"/> {t('loginPlatform')}</button> )}
+               </div>
+            </div>
+
+            <div className="text-center mb-16 mt-8">
+               <h1 className="text-5xl md:text-7xl font-black tracking-widest mb-4 select-none">
+                 <span className="text-white">NEXORA</span> <span className="text-[#06b6d4]">SYRIA</span>
+               </h1>
+               <p className="text-gray-400 font-bold tracking-wide border-t border-[#06b6d4]/30 pt-4 mx-auto w-fit text-lg">{t('explore')}</p>
+            </div>
+
+            <div id="services-section" className="mb-12">
+               <h3 className={`text-2xl font-black text-white mb-6 border-${lang==='ar'?'r':'l'}-4 border-[#06b6d4] p${lang==='ar'?'r':'l'}-4`}>{t('servicesCats')}</h3>
+               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-16">
+                  {defaultCategories.map((cat, idx) => {
+                     const colorClass = getColorClasses(cat.color);
+                     const catName = cat[`name_${lang}`] || cat.name_ar || cat.name;
+                     return (
+                       <div key={cat.id} onClick={() => changeView('mainHub', cat)} className="glass-card p-6 cursor-pointer group flex flex-col items-center text-center justify-center min-h-[160px]">
+                         <div className={`w-14 h-14 rounded-xl flex items-center justify-center mb-4 transition-transform group-hover:scale-110 border ${colorClass.split(' ')[1]} ${colorClass.split(' ')[2]}`}>
+                           {getIconComponent(cat.icon, `w-7 h-7 ${colorClass.split(' ')[0]}`)}
+                         </div>
+                         <h3 className="font-bold text-sm text-gray-200 group-hover:text-white transition-colors">{catName}</h3>
+                       </div>
+                     )
+                  })}
+               </div>
+            </div>
+
+            {userData && (
+               <div className="border-t border-white/10 pt-12 mb-12 animate-[fadeIn_0.8s_ease-out]">
+                  <h3 className={`text-2xl font-black text-white mb-8 flex items-center gap-2 border-${lang==='ar'?'r':'l'}-4 border-[#06b6d4] p${lang==='ar'?'r':'l'}-4`}><ActivityIcon className={`w-6 h-6 text-[#06b6d4] m${lang==='ar'?'l':'r'}-2`}/> {t('myLiveOrders')}</h3>
+                  <div className="space-y-4">
+                     {userRequests.length === 0 ? <p className="text-gray-500 font-bold text-center py-6 glass-card border-dashed">{t('noOrders')}</p> : userRequests.map((req, idx) => (
+                        <div key={idx} className={`glass-card p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-${lang==='ar'?'r':'l'}-4 border-[#06b6d4]`}>
+                           <div className="flex-1 w-full">
+                              <p className="text-xs text-gray-400 font-bold mb-1">{req.dateString}</p>
+                              <h3 className="text-lg font-bold text-white mb-2">{req.type}</h3>
+                              <p className="text-sm text-gray-400 font-semibold whitespace-pre-wrap">{req.details}</p>
+                              
+                              {req.adminNote && (
+                                 <div className="mt-4 p-4 rounded-xl bg-purple-900/20 border border-purple-500/30 w-full shadow-[0_0_15px_rgba(168,85,247,0.1)]">
+                                    <span className="text-purple-400 font-bold text-xs flex items-center gap-1 mb-1"><ActivityIcon className="w-3 h-3"/> {t('adminReply')}</span>
+                                    <span className="text-gray-200 text-sm font-semibold">{req.adminNote}</span>
+                                 </div>
+                              )}
+                           </div>
+                           <div className="flex flex-col gap-2 items-end w-full md:w-auto mt-4 md:mt-0">
+                             <div className={`px-5 py-2.5 rounded-xl font-bold text-sm border whitespace-nowrap shadow-lg ${(req.status || '').includes('مكتمل') || (req.status || '').includes('تم الحل') ? 'bg-green-500/10 border-green-500/30 text-green-400' : (req.status || '').includes('مرفوض') ? 'bg-red-500/10 border-red-500/30 text-red-400' : 'bg-[#06b6d4]/10 border-[#06b6d4]/30 text-[#06b6d4]'}`}>
+                                {t('status')} {req.status || 'قيد المراجعة ⏳'}
+                             </div>
+                           </div>
+                        </div>
+                     ))}
+                  </div>
+               </div>
+            )}
+          </div>
+          <div className="mt-20 border-t border-white/5 pt-8 pb-4 flex flex-col md:flex-row justify-between items-center gap-6 text-sm text-gray-400 font-bold">
+            <p>{t('rights')}</p>
+            <div className="flex gap-6">
+               <button onClick={() => changeView('about')} className="hover:text-[#06b6d4] transition-colors flex items-center gap-1"><InfoIcon className="w-4 h-4"/> {t('about')}</button>
+               <button onClick={() => { const target = document.getElementById('services-section'); if(target) target.scrollIntoView({ behavior: 'smooth' }); }} className="hover:text-[#06b6d4] transition-colors flex items-center gap-1"><CodeIcon className="w-4 h-4"/> {t('ourServices')}</button>
+               <button onClick={() => changeView('terms')} className="hover:text-[#06b6d4] transition-colors flex items-center gap-1"><FileTextIcon className="w-4 h-4"/> {t('terms')}</button>
+            </div>
+          </div>
+        </div>
+      );
+
+      const renderCategoryView = () => {
+         const catServices = services.filter(s => s.categoryId === activeCategory.id);
+         const colorClass = getColorClasses(activeCategory.color);
+         const activeCatName = activeCategory[`name_${lang}`] || activeCategory.name_ar || activeCategory.name;
+         return (
+            <div className="min-h-screen max-w-5xl mx-auto p-4 md:p-8 pt-12 relative z-10 animate-[fadeIn_0.3s_ease-out]">
+               <button onClick={() => changeView('mainHub')} className={`mb-8 flex items-center gap-2 text-gray-400 hover:text-white font-bold transition-colors`}><ArrowRightIcon className={`w-5 h-5 ${lang!=='ar'&&'rotate-180'}`} /> {t('backToCats')}</button>
+               <div className="flex justify-between items-center mb-8 border-b border-white/10 pb-6">
+                  <div className="flex items-center gap-4">
+                     <div className={`p-3 rounded-xl bg-white/5 border ${colorClass.split(' ')[2]}`}>{getIconComponent(activeCategory.icon, `w-8 h-8 ${colorClass.split(' ')[0]}`)}</div>
+                     <h2 className="text-3xl font-black text-white">{activeCatName}</h2>
+                  </div>
+               </div>
+               
+               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {isFetchingServices ? Array.from({length: 6}).map((_, i) => <SkeletonCard key={i} />) : catServices.length === 0 ? (
+                      <p className="text-gray-500 col-span-full text-center py-10 font-bold glass-card border-dashed">{t('emptyCat')}</p>
+                  ) : catServices.map(srv => {
+                     const srvName = srv[`name_${lang}`] || srv.name_ar || srv.name;
+                     const srvDesc = srv[`desc_${lang}`] || srv.desc_ar || srv.desc;
+                     
+                     return(
+                     <div key={srv.id} className="glass-card p-6 flex flex-col justify-between group">
+                        <div className="mb-4">
+                           <h3 className="text-xl font-bold mb-2 text-white group-hover:text-[#06b6d4] transition-colors">{srvName}</h3>
+                           <p className="text-gray-400 text-xs leading-relaxed whitespace-pre-wrap">{srvDesc}</p>
+                        </div>
+                        <div className="flex items-center justify-between mt-auto pt-4 border-t border-white/5">
+                           <span className={`text-xl font-black ${colorClass.split(' ')[0]}`} dir="ltr">{formatPrice(srv.price)}</span>
+                           <button onClick={()=>handleRequestService(srv)} className={`px-4 py-2 rounded-lg font-bold text-xs transition-colors ${colorClass.split(' ')[1]} hover:bg-white/10 text-white`}>{t('addToOrder')}</button>
+                        </div>
+                     </div>
+                  )})}
+               </div>
+            </div>
+         );
+      };
+
+      const renderCartModal = () => {
+         const rawTotal = cart.reduce((sum, item) => sum + (parseFloat(item.price) || 0), 0);
+         const percentVal = parseFloat(discountInfo.percent) || 0;
+         const finalTotal = discountInfo.active ? rawTotal - (rawTotal * (percentVal / 100)) : rawTotal;
+         
+         const userBalance = userData ? (parseFloat(userData.balance) || 0) : 0;
+         const isBalanceSufficient = userBalance >= finalTotal;
+
+         return (
+            <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-[fadeIn_0.2s_ease-out]">
+               <div className="glass-card w-full max-w-lg max-h-[90vh] flex flex-col shadow-[0_0_50px_rgba(6,182,212,0.15)] border-[#06b6d4]/30">
+                  <div className="p-6 border-b border-white/10 shrink-0 flex justify-between items-center">
+                     <h3 className="text-xl font-black text-white flex items-center gap-2"><ShoppingBagIcon className="text-[#06b6d4] w-6 h-6"/> {t('checkoutTitle')}</h3>
+                     <button onClick={() => setIsCartOpen(false)} className="text-gray-400 hover:text-white font-bold transition-colors text-2xl">&times;</button>
+                  </div>
+                  
+                  <div className="flex-1 overflow-y-auto p-6 space-y-6 scrollbar-hide">
+                     <div className="space-y-3">
+                        {cart.length === 0 ? <p className="text-center text-gray-500 my-4 font-bold">{t('emptyCart')}</p> : cart.map((item, idx) => {
+                              const itemName = item[`name_${lang}`] || item.name_ar || item.name || 'خدمة غير محددة';
+                              return (
+                              <div key={idx} className="glass-card p-3 flex justify-between items-center bg-white/5 border-transparent">
+                                 <div><p className="font-bold text-sm text-gray-200">{itemName}</p><p className="text-[#06b6d4] font-black text-xs" dir="ltr">{formatPrice(item.price)}</p></div>
+                                 <button onClick={() => setCart(cart.filter((_, i) => i !== idx))} className="text-red-400 p-2 hover:bg-red-500/20 rounded-lg"><Trash2Icon className="w-4 h-4"/></button>
+                              </div>
+                              );
+                        })}
+                     </div>
+
+                     {cart.length > 0 && (
+                        <div className="glass-card p-5 bg-black/30 border-white/5 mb-6">
+                           <div className="flex justify-between items-center mb-2">
+                              <span className="text-gray-400 font-bold text-sm">{t('balance')}</span>
+                              <span className={`text-lg font-black ${isBalanceSufficient ? 'text-emerald-400' : 'text-red-400'}`} dir="ltr">{formatPrice(userBalance)}</span>
+                           </div>
+                           {!isBalanceSufficient && (
+                              <div className="mt-4 p-3 rounded-lg bg-red-500/10 border border-red-500/30 text-red-400 text-xs font-bold text-center">
+                                 {t('insufficient')}
+                                 <button onClick={() => { setIsCartOpen(false); changeView('wallet'); }} className="block mt-2 mx-auto underline">{t('goToTopup')}</button>
+                              </div>
+                           )}
+                        </div>
+                     )}
+                  </div>
+
+                  {cart.length > 0 && (
+                     <div className="p-6 border-t border-white/10 shrink-0 bg-black/40 rounded-b-2xl">
+                        <div className="flex justify-between items-center mb-4"><span className="text-gray-400 font-bold text-sm">{t('totalRequired')}</span><span className="text-2xl font-black text-[#06b6d4]" dir="ltr">{formatPrice(finalTotal)}</span></div>
+                        <button onClick={handleCheckoutFromWallet} disabled={loading || !isBalanceSufficient} className={`w-full rounded-xl py-4 text-sm font-bold flex justify-center items-center gap-2 transition-all ${isBalanceSufficient ? 'btn-cyan' : 'bg-gray-800 text-gray-500 cursor-not-allowed border border-gray-700'}`}>
+                           {loading ? t('processing') : <React.Fragment><WalletIcon className="w-5 h-5"/> {t('payFromWallet')}</React.Fragment>}
+                        </button>
+                     </div>
+                  )}
+               </div>
+            </div>
+         );
+      };
+
+      const renderAdminDashboard = () => {
+        const totalRevenue = adminTasks.filter(t => (t.status || '').includes('مكتمل') && !(t.type || '').includes('شحن')).reduce((sum, t) => sum + parseFloat(t.total || 0), 0);
+        const pendingCount = adminTasks.filter(t => (t.status || '').includes('قيد المراجعة')).length;
+        const totalTrust = adminClients.reduce((sum, client) => sum + (parseFloat(client.balance) || 0), 0);
+        
+        const totalBonusesGiven = adminTasks.filter(t => (t.status || '').includes('مكتمل') && (t.type || '').includes('شحن')).reduce((sum, t) => sum + (parseFloat(t.bonusAmount) || 0), 0);
+
+        const filteredOrders = adminTasks.filter(task => {
+            const s = task.status || 'قيد المراجعة ⏳';
+            if (adminOrderFilter === 'all') return true;
+            if (adminOrderFilter === 'pending') return s.includes('مراجعة');
+            if (adminOrderFilter === 'progress') return s.includes('تنفيذ');
+            if (adminOrderFilter === 'completed') return s.includes('مكتمل') || s.includes('تم الحل');
+            if (adminOrderFilter === 'rejected') return s.includes('مرفوض');
+            return true;
+        });
+        const paginatedOrders = filteredOrders.slice((adminOrdersPage - 1) * itemsPerPage, adminOrdersPage * itemsPerPage);
+        const totalOrderPages = Math.ceil(filteredOrders.length / itemsPerPage);
+
+        const paginatedClients = adminClients.slice((adminClientsPage - 1) * itemsPerPage, adminClientsPage * itemsPerPage);
+        const totalClientPages = Math.ceil(adminClients.length / itemsPerPage);
+
+        return (
+        <div className="min-h-screen max-w-7xl mx-auto p-4 md:p-8 pt-12 relative z-10 animate-[fadeIn_0.5s_ease-out]">
+          
+          {editingClient && (
+            <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-[fadeIn_0.2s_ease-out]">
+               <div className="glass-card w-full max-w-md p-8 border-[#06b6d4]/50 shadow-[0_0_40px_rgba(6,182,212,0.2)]">
+                  <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2"><EditIcon className="w-6 h-6 text-[#06b6d4]"/> تحديث بيانات العميل</h3>
+                  <form onSubmit={handleUpdateClientData} className="space-y-4">
+                     <div><label className="text-xs text-gray-400 font-bold mb-1 block">الاسم الكامل</label><input required type="text" className="glass-input w-full rounded-xl py-3 px-4 text-sm font-bold" value={editingClient.name} onChange={e => setEditingClient({...editingClient, name: e.target.value})} /></div>
+                     <div><label className="text-xs text-gray-400 font-bold mb-1 block">رقم الواتساب</label><input required type="text" className="glass-input w-full rounded-xl py-3 px-4 text-sm font-bold" value={editingClient.whatsapp} onChange={e => setEditingClient({...editingClient, whatsapp: e.target.value})} /></div>
+                     <div><label className="text-xs text-gray-400 font-bold mb-1 block">المنطقة</label><input required type="text" className="glass-input w-full rounded-xl py-3 px-4 text-sm font-bold" value={editingClient.area} onChange={e => setEditingClient({...editingClient, area: e.target.value})} /></div>
+                     <div><label className="text-xs text-emerald-400 font-bold mb-1 block">رصيد المحفظة ($ USD)</label><input required type="number" step="0.01" className="glass-input w-full rounded-xl py-3 px-4 text-sm font-black text-emerald-400" value={editingClient.balance} onChange={e => setEditingClient({...editingClient, balance: e.target.value})} /></div>
+                     <div className="flex gap-2 mt-6">
+                        <button type="button" onClick={() => setEditingClient(null)} className="flex-1 py-3 rounded-xl border border-white/10 text-gray-400 hover:bg-white/5 transition-colors font-bold">إلغاء</button>
+                        <button type="submit" disabled={loading} className="flex-1 btn-cyan py-3 rounded-xl font-bold">{loading ? 'جاري الحفظ...' : 'حفظ التعديلات'}</button>
+                     </div>
+                  </form>
+               </div>
+            </div>
+          )}
+
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+            <div><h2 className="text-3xl font-black text-[#06b6d4] flex items-center gap-3"><SettingsIcon className="w-8 h-8"/> {t('adminDash')}</h2></div>
+            <button onClick={() => { window.location.hash = ''; setCurrentView('mainHub'); }} className="glass-card px-4 py-2 text-sm font-bold text-red-400 hover:bg-red-500/10 border border-red-500/20 transition-colors">{t('endSession')}</button>
+          </div>
+
+          <div className="flex overflow-x-auto bg-black/40 rounded-xl p-1 mb-8 border border-white/5 w-full gap-1 scrollbar-hide">
+             <button onClick={() => setAdminViewSection('overview')} className={`px-6 py-3 text-sm font-bold rounded-lg whitespace-nowrap transition-all ${adminViewSection === 'overview' ? 'bg-[#06b6d4]/20 text-[#06b6d4]' : 'text-gray-400 hover:text-white'}`}><ActivityIcon className="w-4 h-4 inline mx-2"/> {t('overview')}</button>
+             <button onClick={() => setAdminViewSection('clients')} className={`px-6 py-3 text-sm font-bold rounded-lg whitespace-nowrap transition-all ${adminViewSection === 'clients' ? 'bg-[#06b6d4]/20 text-[#06b6d4]' : 'text-gray-400 hover:text-white'}`}><UsersIcon className="w-4 h-4 inline mx-2"/> {t('clientsDb')}</button>
+             <button onClick={() => setAdminViewSection('catalog')} className={`px-6 py-3 text-sm font-bold rounded-lg whitespace-nowrap transition-all ${adminViewSection === 'catalog' ? 'bg-[#06b6d4]/20 text-[#06b6d4]' : 'text-gray-400 hover:text-white'}`}><ShoppingBagIcon className="w-4 h-4 inline mx-2"/> {t('catalog')}</button>
+             <button onClick={() => setAdminViewSection('orders')} className={`relative px-6 py-3 text-sm font-bold rounded-lg whitespace-nowrap transition-all ${adminViewSection === 'orders' ? 'bg-[#06b6d4]/20 text-[#06b6d4]' : 'text-gray-400 hover:text-white'}`}>
+                <FileTextIcon className="w-4 h-4 inline mx-2"/> {t('ordersAdmin')}
+                {pendingCount > 0 && <span className="absolute top-2 right-2 flex h-3 w-3"><span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span><span className="relative inline-flex rounded-full h-3 w-3 bg-amber-500"></span></span>}
+             </button>
+             <button onClick={() => setAdminViewSection('settings')} className={`px-6 py-3 text-sm font-bold rounded-lg whitespace-nowrap transition-all ${adminViewSection === 'settings' ? 'bg-[#06b6d4]/20 text-[#06b6d4]' : 'text-gray-400 hover:text-white'}`}><SettingsIcon className="w-4 h-4 inline mx-2"/> {t('settingsAdmin')}</button>
+          </div>
+
+          {adminViewSection === 'overview' && (
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
+               <div className="glass-card p-5 border-b-4 border-b-blue-500"><div className="flex justify-between items-start"><div><p className="text-gray-400 text-xs font-bold mb-1">{t('totalClients')}</p><h3 className="text-2xl font-black text-white">{adminClients.length}</h3></div><UsersIcon className="w-8 h-8 text-blue-400 opacity-50" /></div></div>
+               <div className="glass-card p-5 border-b-4 border-b-amber-500"><div className="flex justify-between items-start"><div><p className="text-gray-400 text-xs font-bold mb-1">{t('pendingOrders')}</p><h3 className="text-2xl font-black text-white">{pendingCount}</h3></div><ActivityIcon className="w-8 h-8 text-amber-400 opacity-50" /></div></div>
+               <div className="glass-card p-5 border-b-4 border-b-purple-500"><div className="flex justify-between items-start"><div><p className="text-gray-400 text-xs font-bold mb-1">{t('trustFund')}</p><h3 className="text-2xl font-black text-purple-400" dir="ltr">{formatPrice(totalTrust)}</h3></div><WalletIcon className="w-8 h-8 text-purple-400 opacity-50" /></div></div>
+               <div className="glass-card p-5 border-b-4 border-b-fuchsia-500"><div className="flex justify-between items-start"><div><p className="text-gray-400 text-xs font-bold mb-1">{t('bonusesGiven')}</p><h3 className="text-2xl font-black text-fuchsia-400" dir="ltr">{formatPrice(totalBonusesGiven)}</h3></div><GiftIcon className="w-8 h-8 text-fuchsia-400 opacity-50" /></div></div>
+               <div className="glass-card p-5 border-b-4 border-b-emerald-500"><div className="flex justify-between items-start"><div><p className="text-gray-400 text-xs font-bold mb-1">{t('totalRev')}</p><h3 className="text-2xl font-black text-emerald-400" dir="ltr">{formatPrice(totalRevenue)}</h3></div><DollarSignIcon className="w-8 h-8 text-emerald-400 opacity-50" /></div></div>
+            </div>
+          )}
+
+          {adminViewSection === 'clients' && (
+            <div>
+               <div className="overflow-x-auto glass-card border-[#06b6d4]/20 mb-4">
+                  <table className="w-full text-sm text-gray-300" style={{textAlign: lang==='ar'?'right':'left'}}>
+                     <thead className="bg-[#06b6d4]/10 text-[#06b6d4] font-bold border-b border-[#06b6d4]/20">
+                        <tr><th className="p-4">ID</th><th className="p-4">{t('fullName')}</th><th className="p-4">WhatsApp</th><th className="p-4">{t('area')}</th><th className="p-4">{t('balanceCol')} (USD)</th><th className="p-4 text-center">الإجراء</th></tr>
+                     </thead>
+                     <tbody>
+                        {paginatedClients.map(client => (
+                           <tr key={client.id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
+                              <td className="p-4 font-mono text-[#06b6d4] font-bold">{client.serialId}</td>
+                              <td className="p-4 font-bold text-white">{client.name}</td>
+                              <td className="p-4"><a href={`https://wa.me/${client.whatsapp}`} target="_blank" className="text-green-400 hover:underline font-bold" dir="ltr">{client.whatsapp}</a></td>
+                              <td className="p-4 font-bold">{client.area}</td>
+                              <td className="p-4 font-black text-emerald-400" dir="ltr">${(parseFloat(client.balance) || 0).toFixed(2)}</td>
+                              <td className="p-4 text-center">
+                                 <button onClick={() => setEditingClient(client)} className="text-blue-400 bg-blue-500/10 hover:bg-blue-500/20 px-3 py-1.5 rounded-lg text-xs font-bold transition-colors">تعديل البيانات</button>
+                              </td>
+                           </tr>
+                        ))}
+                     </tbody>
+                  </table>
+               </div>
+               {totalClientPages > 1 && (
+                  <div className="flex justify-center gap-2">
+                     <button onClick={() => setAdminClientsPage(p => Math.max(1, p - 1))} disabled={adminClientsPage===1} className="px-4 py-2 glass-card text-sm font-bold hover:bg-white/10">{t('prev')}</button>
+                     <span className="px-4 py-2 text-[#06b6d4] font-bold">{t('page')} {adminClientsPage} / {totalClientPages}</span>
+                     <button onClick={() => setAdminClientsPage(p => Math.min(totalClientPages, p + 1))} disabled={adminClientsPage===totalClientPages} className="px-4 py-2 glass-card text-sm font-bold hover:bg-white/10">{t('next')}</button>
+                  </div>
+               )}
+            </div>
+          )}
+
+          {adminViewSection === 'catalog' && (
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              <div className="glass-card p-6 h-fit border-t-4 border-t-[#06b6d4]" id="service-form">
+                 <h3 className="text-xl font-bold mb-4 text-[#06b6d4]">{editingServiceId ? t('updateService') : t('addService')}</h3>
+                 <div className="space-y-4">
+                    <select className="glass-input w-full rounded-xl py-3 px-4 text-sm font-bold outline-none" value={newItem.categoryId} onChange={e=>setNewItem({...newItem, categoryId: e.target.value})}>
+                       {defaultCategories.map(c => <option key={c.id} value={c.id} className="bg-gray-900 text-white">{c[`name_${lang}`] || c.name_ar}</option>)}
+                    </select>
+                    
+                    <div className="flex gap-2 bg-black/30 p-1 rounded-xl border border-white/10">
+                       <button onClick={() => setActiveLangTab('ar')} className={`flex-1 py-2 rounded-lg font-bold text-xs transition-colors ${activeLangTab === 'ar' ? 'bg-[#06b6d4] text-black shadow-md' : 'text-gray-400 hover:text-white'}`}>عربي</button>
+                       <button onClick={() => setActiveLangTab('en')} className={`flex-1 py-2 rounded-lg font-bold text-xs transition-colors ${activeLangTab === 'en' ? 'bg-[#06b6d4] text-black shadow-md' : 'text-gray-400 hover:text-white'}`}>English</button>
+                       <button onClick={() => setActiveLangTab('tr')} className={`flex-1 py-2 rounded-lg font-bold text-xs transition-colors ${activeLangTab === 'tr' ? 'bg-[#06b6d4] text-black shadow-md' : 'text-gray-400 hover:text-white'}`}>Türkçe</button>
+                    </div>
+
+                    <input type="text" placeholder={`${t('srvName')} (${activeLangTab.toUpperCase()})`} className="glass-input w-full rounded-xl py-3 px-4 font-bold" value={newItem[`name_${activeLangTab}`]} onChange={e => setNewItem({...newItem, [`name_${activeLangTab}`]: e.target.value})} />
+                    <textarea placeholder={`${t('srvDesc')} (${activeLangTab.toUpperCase()})`} rows="3" className="glass-input w-full rounded-xl py-3 px-4 resize-none font-bold" value={newItem[`desc_${activeLangTab}`]} onChange={e => setNewItem({...newItem, [`desc_${activeLangTab}`]: e.target.value})}></textarea>
+
+                    <input type="number" placeholder={t('srvPrice')} className="glass-input w-full rounded-xl py-3 px-4 font-bold" value={newItem.price} onChange={e => setNewItem({...newItem, price: e.target.value})} />
+                    <div className="flex gap-2 mt-2">
+                       <button onClick={handleAddOrUpdateItem} disabled={loading} className="btn-cyan w-full py-3 rounded-xl font-bold">{t('publish')}</button>
+                       {editingServiceId && <button onClick={()=>{setEditingServiceId(null); setNewItem({name_ar:'',name_en:'',name_tr:'',desc_ar:'',desc_en:'',desc_tr:'',price:'',categoryId:'CAT-001'}); setActiveLangTab('ar');}} className="glass-card px-4 text-red-400 hover:bg-red-500/20 font-bold">X</button>}
+                    </div>
+                 </div>
+              </div>
+              <div className="lg:col-span-2 space-y-4">
+                 <h3 className="text-xl font-bold text-white mb-4">{t('currentSrvs')}</h3>
+                 {isFetchingServices ? Array.from({length: 4}).map((_, i) => <SkeletonCard key={i} />) : services.map(srv => {
+                    const category = defaultCategories.find(c => c.id === srv.categoryId);
+                    const catName = category ? (category[`name_${lang}`] || category.name_ar || category.name) : 'قسم غير محدد';
+                    const srvName = srv[`name_${lang}`] || srv.name_ar || srv.name;
+
+                    return (
+                    <div key={srv.id} className={`glass-card p-4 flex flex-col md:flex-row justify-between items-center gap-4 border-${lang==='ar'?'r':'l'}-4 border-[#06b6d4]`}>
+                       <div className="w-full md:w-auto">
+                          <span className="text-xs text-black bg-[#06b6d4] px-3 py-1 rounded-full mb-2 inline-block font-bold">{catName}</span>
+                          <p className="font-bold text-white text-lg">{srvName}</p>
+                          <p className="text-sm text-green-400 font-bold mt-1" dir="ltr">{formatPrice(srv.price)}</p>
+                       </div>
+                       <div className="flex gap-2 w-full md:w-auto mt-2 md:mt-0">
+                          <button onClick={() => handleEditClick(srv)} className="text-blue-400 flex-1 md:flex-none px-4 py-2 hover:bg-blue-500/20 rounded-xl flex items-center justify-center gap-2 text-sm font-bold border border-blue-500/30 transition-colors"><EditIcon className="w-5 h-5"/> {t('edit')}</button>
+                          <button onClick={() => handleDeleteItem(srv.id)} className="text-red-400 flex-1 md:flex-none px-4 py-2 hover:bg-red-500/20 rounded-xl flex items-center justify-center gap-2 text-sm font-bold border border-red-500/30 transition-colors"><Trash2Icon className="w-5 h-5"/> {t('delete')}</button>
+                       </div>
+                    </div>
+                 )})}
+              </div>
+            </div>
+          )}
+
+          {adminViewSection === 'orders' && (
+            <div className="space-y-4">
+               <div className="flex gap-2 overflow-x-auto scrollbar-hide mb-6 bg-black/40 p-2 rounded-xl border border-white/5">
+                  <button onClick={() => {setAdminOrderFilter('all'); setAdminOrdersPage(1)}} className={`px-5 py-2 rounded-lg font-bold text-sm whitespace-nowrap transition-colors ${adminOrderFilter === 'all' ? 'bg-[#06b6d4] text-black' : 'text-gray-400'}`}>{t('filterAll')} ({adminTasks.length})</button>
+                  <button onClick={() => {setAdminOrderFilter('pending'); setAdminOrdersPage(1)}} className={`px-5 py-2 rounded-lg font-bold text-sm whitespace-nowrap transition-colors ${adminOrderFilter === 'pending' ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' : 'text-gray-400'}`}>{t('statusPending')}</button>
+                  <button onClick={() => {setAdminOrderFilter('progress'); setAdminOrdersPage(1)}} className={`px-5 py-2 rounded-lg font-bold text-sm whitespace-nowrap transition-colors ${adminOrderFilter === 'progress' ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30' : 'text-gray-400'}`}>{t('statusProgress')}</button>
+                  <button onClick={() => {setAdminOrderFilter('completed'); setAdminOrdersPage(1)}} className={`px-5 py-2 rounded-lg font-bold text-sm whitespace-nowrap transition-colors ${adminOrderFilter === 'completed' ? 'bg-green-500/20 text-green-400 border border-green-500/30' : 'text-gray-400'}`}>{t('statusDone')}</button>
+                  <button onClick={() => {setAdminOrderFilter('rejected'); setAdminOrdersPage(1)}} className={`px-5 py-2 rounded-lg font-bold text-sm whitespace-nowrap transition-colors ${adminOrderFilter === 'rejected' ? 'bg-red-500/20 text-red-400 border border-red-500/30' : 'text-gray-400'}`}>{t('statusRejected')}</button>
+               </div>
+
+               {paginatedOrders.map((task, idx) => {
+                  const isTopup = (task.type || '').includes('شحن');
+                  return(
+                  <div key={idx} className={`glass-card p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 border-${lang==='ar'?'r':'l'}-4 ${isTopup ? 'border-emerald-500' : 'border-[#06b6d4]'}`}>
+                     <div className="flex-1 w-full">
+                        <div className="flex items-center gap-3 mb-2">
+                           <span className="text-xs bg-white/10 px-3 py-1 rounded-full text-gray-300 font-bold">{task.dateString}</span>
+                           <span className={`text-xs font-bold px-3 py-1 rounded-full ${isTopup ? 'bg-emerald-500/20 text-emerald-400' : 'bg-[#06b6d4]/10 text-[#06b6d4]'}`}>{task.serialId}</span>
+                        </div>
+                        <div className="bg-black/30 p-4 rounded-xl mb-4 border border-white/5 grid grid-cols-1 sm:grid-cols-3 gap-3">
+                           <p className="text-sm font-bold text-white"><UserIcon className="w-4 h-4 inline text-gray-400 mx-2"/>{task.clientName}</p>
+                           <a href={`https://wa.me/${task.clientWhatsapp}`} target="_blank" className="text-sm font-bold text-green-400 hover:underline" dir="ltr"><PhoneIcon className="w-4 h-4 inline mx-2"/>{task.clientWhatsapp}</a>
+                        </div>
+                        <h3 className={`text-lg font-black mb-2 ${isTopup ? 'text-emerald-400' : 'text-white'}`}>{task.type}</h3>
+                        <p className="text-sm text-gray-400 whitespace-pre-wrap leading-relaxed">{task.details}</p>
+                        
+                        {task.adminNote && (
+                           <div className="mt-3 p-3 bg-purple-500/10 border border-purple-500/20 rounded-lg">
+                              <span className="text-purple-400 font-bold text-xs block mb-1">الملاحظة المُرسلة للعميل:</span>
+                              <span className="text-gray-300 text-sm font-semibold">{task.adminNote}</span>
+                           </div>
+                        )}
+
+                        {task.fileUrl && task.fileUrl.startsWith('http') && (<a href={task.fileUrl} target="_blank" className="mt-4 inline-flex items-center gap-2 text-xs font-bold bg-[#06b6d4]/20 text-[#06b6d4] px-4 py-2 rounded-lg transition-colors"><EyeIcon className="w-4 h-4"/> {t('viewAttach')}</a>)}
+                     </div>
+                     <div className="w-full md:w-56">
+                        <label className="text-xs text-gray-400 font-bold mb-2 block">{t('updateStatus')}</label>
+                        <select className={`glass-input w-full rounded-xl py-3 px-4 text-sm font-bold outline-none cursor-pointer ${(task.status||'').includes('مكتمل') ? 'text-green-400 border-green-500/50 bg-green-500/10' : 'text-[#06b6d4] border-[#06b6d4]/50'}`} value={task.status || 'قيد المراجعة ⏳'} onChange={(e) => handleStatusChange(task, e.target.value)}>
+                           <option value="قيد المراجعة ⏳" className="bg-gray-900 text-amber-400">{t('statusPending')}</option>
+                           <option value="جاري التنفيذ 🚀" className="bg-gray-900 text-blue-400">{t('statusProgress')}</option>
+                           <option value="تم الحل / مكتمل ✅" className="bg-gray-900 text-green-400">{t('statusDone')}</option>
+                           <option value="مرفوض ❌" className="bg-gray-900 text-red-400">{t('statusRejected')}</option>
+                        </select>
+                        {((task.status || '').includes('مكتمل') && !isTopup) && (
+                            <button onClick={() => generatePDFInvoice(task)} className="mt-3 w-full text-xs font-bold text-white bg-blue-600/30 border border-blue-500/50 hover:bg-blue-600/50 px-3 py-2 rounded-lg flex justify-center items-center gap-1 transition-colors"><DownloadIcon className="w-4 h-4"/> PDF</button>
+                        )}
+                     </div>
+                  </div>
+               )})}
+               
+               {totalOrderPages > 1 && (
+                  <div className="flex justify-center gap-2 mt-4">
+                     <button onClick={() => setAdminOrdersPage(p => Math.max(1, p - 1))} disabled={adminOrdersPage===1} className="px-4 py-2 glass-card text-sm font-bold hover:bg-white/10">{t('prev')}</button>
+                     <span className="px-4 py-2 text-[#06b6d4] font-bold">{t('page')} {adminOrdersPage} / {totalOrderPages}</span>
+                     <button onClick={() => setAdminOrdersPage(p => Math.min(totalOrderPages, p + 1))} disabled={adminOrdersPage===totalOrderPages} className="px-4 py-2 glass-card text-sm font-bold hover:bg-white/10">{t('next')}</button>
+                  </div>
+               )}
+            </div>
+          )}
+
+          {adminViewSection === 'settings' && (
+            <div className="space-y-8">
+               
+               <div className="glass-card p-8 border-t-4 border-t-purple-500">
+                  <h3 className="text-2xl font-black mb-4 text-white flex items-center gap-2"><GiftIcon className="text-purple-400 w-8 h-8"/> {t('manageBonuses')}</h3>
+                  <p className="text-sm text-gray-400 mb-6">{t('manageBonusesDesc')}</p>
+                  
+                  <div className="flex flex-wrap gap-4 items-end mb-6 bg-black/30 p-4 rounded-xl border border-white/5">
+                     <div className="flex-1 min-w-[150px]">
+                        <label className="text-xs text-gray-400 font-bold mb-1 block">{t('whenTopup')}</label>
+                        <input type="number" className="glass-input w-full rounded-xl py-3 px-4 font-bold" placeholder="مثال: 50" value={newTier.threshold} onChange={e=>setNewTier({...newTier, threshold: e.target.value})} />
+                     </div>
+                     <div className="flex-1 min-w-[150px]">
+                        <label className="text-xs text-green-400 font-bold mb-1 block">{t('bonusValue')}</label>
+                        <input type="number" className="glass-input w-full rounded-xl py-3 px-4 font-bold text-green-400" placeholder="مثال: 10" value={newTier.bonus} onChange={e=>setNewTier({...newTier, bonus: e.target.value})} />
+                     </div>
+                     <button onClick={() => {
+                         if(newTier.threshold && newTier.bonus) {
+                            setBonusTiers(prev => [...prev, {threshold: parseFloat(newTier.threshold), bonus: parseFloat(newTier.bonus)}].sort((a,b)=>b.threshold-a.threshold));
+                            setNewTier({threshold:'', bonus:''});
+                         }
+                     }} className="bg-purple-500/20 text-purple-400 hover:bg-purple-500/30 px-6 py-3 rounded-xl font-bold border border-purple-500/30 transition-colors">{t('addOfferBtn')}</button>
+                  </div>
+
+                  <div className="space-y-3 mb-6">
+                     {bonusTiers.sort((a,b)=>b.threshold-a.threshold).map((tier, idx) => (
+                        <div key={idx} className="flex justify-between items-center bg-white/5 p-3 rounded-xl border border-white/10">
+                           <div className="font-bold text-sm">
+                              {t('topupGet')} <span className="text-[#06b6d4]">${tier.threshold}</span> <ArrowRightIcon className={`inline w-4 h-4 mx-2 ${lang==='ar'?'rotate-180':''}`} /> {t('getBonus')} <span className="text-green-400">${tier.bonus}</span>
+                           </div>
+                           <button onClick={()=>setBonusTiers(bonusTiers.filter((_, i) => i !== idx))} className="text-red-400 p-2 hover:bg-red-500/20 rounded-lg"><Trash2Icon className="w-4 h-4"/></button>
+                        </div>
+                     ))}
+                  </div>
+
+                  <button onClick={handleSaveBonusTiers} disabled={loading} className="w-full bg-purple-600/80 hover:bg-purple-600 text-white py-3 rounded-xl font-bold transition-colors">{t('saveOffersBtn')}</button>
+               </div>
+
+               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div className="glass-card p-8 border-t-4 border-t-[#06b6d4]">
+                     <h3 className="text-2xl font-black mb-4 text-white flex items-center gap-2"><DollarSignIcon className="text-[#06b6d4] w-8 h-8"/> Rate (USD/SYP)</h3>
+                     <div className="flex flex-col sm:flex-row gap-4 items-center">
+                        <input type="number" className="glass-input w-full rounded-xl py-4 px-4 text-xl font-black text-white" value={newExchangeRateInput} onChange={e => setNewExchangeRateInput(e.target.value)} />
+                        <button onClick={handleUpdateExchangeRate} disabled={loading} className="btn-cyan px-10 py-4 rounded-xl font-bold flex justify-center items-center gap-2">حفظ</button>
+                     </div>
+                  </div>
+               </div>
+
+               <div className="glass-card p-8 border-t-4 border-t-red-500">
+                  <h3 className="text-2xl font-black mb-6 text-white flex items-center gap-2"><SettingsIcon className="text-red-400 w-8 h-8"/> إدارة النظام والبيانات المتقدمة</h3>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                     <div className="bg-black/30 p-6 rounded-xl border border-white/5">
+                        <h4 className="font-bold text-emerald-400 mb-2">تصدير البيانات (النسخ الاحتياطي)</h4>
+                        <p className="text-xs text-gray-400 mb-4">تحميل كافة بيانات العملاء والطلبات كملف CSV قابل للفتح في برنامج Excel.</p>
+                        <button onClick={handleExportData} disabled={loading} className="w-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/30 py-3 rounded-lg font-bold flex items-center justify-center gap-2">
+                           <DownloadIcon className="w-5 h-5"/> تصدير قاعدة البيانات (Excel)
+                        </button>
+                     </div>
+
+                     <div className="bg-black/30 p-6 rounded-xl border border-red-500/10">
+                        <h4 className="font-bold text-red-500 mb-2">استعادة ضبط المصنع</h4>
+                        <p className="text-xs text-gray-400 mb-4">هذا الإجراء سيقوم بحذف <span className="text-red-400 font-bold">جميع</span> العملاء، الطلبات، والخدمات نهائياً من قاعدة بيانات Firebase.</p>
+                        <button onClick={handleFactoryReset} disabled={loading} className="w-full bg-red-600/20 text-red-400 border border-red-500/30 hover:bg-red-600/40 py-3 rounded-lg font-bold flex items-center justify-center gap-2">
+                           <Trash2Icon className="w-5 h-5"/> مسح كافة بيانات النظام
+                        </button>
+                     </div>
+                  </div>
+               </div>
+            </div>
+          )}
+        </div>
+      );
+      };
+
+      return (
+        <div className="relative min-h-screen selection:bg-[#06b6d4]/30 flex flex-col">
+          <style>{customStyles}</style>
+          
+          <div className="tech-animated-bg"></div>
+          <div className="glowing-orb"></div>
+          <div className="glowing-orb-2"></div>
+          
+          {renderWelcomePromo()}
+          {renderDialog()}
+          {toastMessage && <div className="fixed top-6 right-1/2 translate-x-1/2 z-[9999] glass-card bg-green-900/40 border-green-500/50 px-6 py-4 flex items-center gap-3 shadow-[0_0_20px_rgba(16,185,129,0.3)]"><CheckCircleIcon className="text-green-400 w-6 h-6" /><span className="font-bold text-sm text-white">{toastMessage}</span></div>}
+          
+          {isCartOpen && renderCartModal()}
+          
+          <div className="flex-grow">
+            {currentView === 'login' && !showAdminLogin && renderLogin()}
+            {currentView === 'register' && !showAdminLogin && renderRegister()}
+            {currentView === 'about' && !showAdminLogin && renderAbout()}
+            {currentView === 'terms' && !showAdminLogin && renderTerms()}
+            {currentView === 'wallet' && !showAdminLogin && renderWallet()}
+            {currentView === 'mainHub' && !activeCategory && !showAdminLogin && renderMainHub()}
+            {currentView === 'mainHub' && activeCategory && !showAdminLogin && renderCategoryView()}
+            {currentView === 'adminDashboard' && renderAdminDashboard()}
+          </div>
+
+          {showAdminLogin && currentView !== 'adminDashboard' && (
+            <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-[fadeIn_0.3s_ease-out]">
+               <div className="glass-card w-full max-w-sm p-8 text-center border-red-500/50 shadow-[0_0_40px_rgba(239,68,68,0.2)]">
+                  <LockIcon className="w-10 h-10 text-red-500 mx-auto mb-4" />
+                  <h3 className="text-xl font-bold mb-2">{t('adminGateway')}</h3>
+                  <p className="text-sm text-gray-400 mb-6">{t('adminMsg')}</p>
+                  <form onSubmit={handleAdminLogin}>
+                    <input type="password" placeholder="PIN" className="glass-input w-full rounded-xl py-3 text-center tracking-widest font-bold mb-4" value={adminPin} onChange={e=>setAdminPin(e.target.value)} />
+                    <div className="flex gap-2">
+                       <button type="button" onClick={() => setShowAdminLogin(false)} className="flex-1 py-3 rounded-xl border border-white/10 text-gray-400">{t('cancel')}</button>
+                       <button type="submit" disabled={loading} className="flex-1 bg-red-500/20 text-red-400 font-bold py-3 rounded-xl border border-red-500/30">{t('safeLogin')}</button>
+                    </div>
+                  </form>
+               </div>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>
