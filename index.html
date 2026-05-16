@@ -90,9 +90,9 @@
         explore: "استكشف خدماتنا الإلكترونية المتكاملة لعام 2026", servicesCats: "(خدماتنا)",
         myLiveOrders: "طلباتي المباشرة (Live)", noOrders: "لا توجد طلبات سابقة. ستظهر طلباتك هنا ليتم تتبعها.",
         status: "الحالة:", about: "من نحن", ourServices: "خدماتنا", terms: "شروط الخدمة", rights: "© 2026 NEXORA SYRIA. جميع الحقوق محفوظة.",
-        backToPlat: "عودة للمنصة", loginTitle: "تسجيل الدخول", phoneNum: "رقم الواتساب المسجل", pass: "كلمة المرور",
+        backToPlat: "عودة للمنصة", loginTitle: "تسجيل الدخول", phoneNum: "رقم الهاتف المسجل", pass: "كلمة المرور",
         verifying: "جاري التحقق...", loginBtn: "دخول للمنصة", noAccount: "ليس لديك حساب؟", createAcc: "إنشاء حساب جديد",
-        fullName: "الاسم الكامل", whatsapp: "رقم الواتساب", area: "المنطقة / المحافظة", choosePass: "تحديد كلمة مرور قوية",
+        fullName: "الاسم الكامل", whatsapp: "رقم الهاتف الواتساب", area: "المنطقة / المحافظة", choosePass: "تحديد كلمة مرور قوية",
         regBtn: "تسجيل الحساب", haveAcc: "لديك حساب بالفعل؟", loginHere: "تسجيل الدخول",
         addToOrder: "إضافة للطلب", emptyCat: "لا توجد خدمات حالياً في هذا القسم.", backToCats: "العودة للأقسام",
         checkoutTitle: "إتمام الطلب", emptyCart: "السلة فارغة حالياً.", payMethod: "طريقة الدفع:", bankTransfer: "تحويل إلكتروني",
@@ -145,7 +145,7 @@
         explore: "Explore our integrated digital services for 2026", servicesCats: "Our Services",
         myLiveOrders: "My Live Orders", noOrders: "No previous orders. Your requests will appear here.",
         status: "Status:", about: "About Us", ourServices: "Services", terms: "Terms of Service", rights: "© 2026 NEXORA SYRIA. All rights reserved.",
-        backToPlat: "Back to Platform", loginTitle: "Login", phoneNum: "Registered WhatsApp", pass: "Password",
+        backToPlat: "Back to Platform", loginTitle: "Login", phoneNum: "Registered Phone", pass: "Password",
         verifying: "Verifying...", loginBtn: "Login", noAccount: "Don't have an account?", createAcc: "Create New Account",
         fullName: "Full Name", whatsapp: "WhatsApp Number", area: "Area / City", choosePass: "Set strong password",
         regBtn: "Register Account", haveAcc: "Already have an account?", loginHere: "Login here",
@@ -191,7 +191,7 @@
         explore: "2026 için entegre dijital hizmetlerimizi keşfedin", servicesCats: "Hizmetlerimiz",
         myLiveOrders: "Canlı Siparişlerim", noOrders: "Önceki sipariş yok. Talepleriniz burada görünecek.",
         status: "Durum:", about: "Hakkımızda", ourServices: "Hizmetlerimiz", terms: "Hizmet Şartları", rights: "© 2026 NEXORA SYRIA. Tüm hakları saklıdır.",
-        backToPlat: "Platforma Dön", loginTitle: "Giriş", phoneNum: "Kayıtlı WhatsApp", pass: "Şifre",
+        backToPlat: "Platforma Dön", loginTitle: "Giriş", phoneNum: "Kayıtlı Telefon", pass: "Şifre",
         verifying: "Doğrulanıyor...", loginBtn: "Giriş Yap", noAccount: "Hesabınız yok mu?", createAcc: "Yeni Hesap Oluştur",
         fullName: "Ad Soyad", whatsapp: "WhatsApp Numarası", area: "Bölge / Şehir", choosePass: "Güçlü şifre belirle",
         regBtn: "Hesap Oluştur", haveAcc: "Zaten hesabınız var mı?", loginHere: "Buradan giriş yapın",
@@ -263,6 +263,12 @@
     const FacebookIcon=({className})=><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>;
     const InstagramIcon=({className})=><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>;
     const WhatsAppIcon=({className})=><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>;
+    
+    // --- أيقونات الأقسام الجديدة ---
+    const PlaneIcon=({className})=><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-.5-.5-2.5 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.2-1.1.6L3 8l6 4-3 3-3-1-2 2 4 4 2-2-1-3 3-3 4 6Z"></path></svg>;
+    const CreditCardIcon=({className})=><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><rect width="20" height="14" x="2" y="5" rx="2"></rect><line x1="2" x2="22" y1="10" y2="10"></line></svg>;
+    const MonitorIcon=({className})=><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><rect width="20" height="14" x="2" y="3" rx="2"></rect><line x1="8" x2="16" y1="21" y2="21"></line><line x1="12" x2="12" y1="17" y2="21"></line></svg>;
+    const BookOpenIcon=({className})=><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>;
 
     const SkeletonCard = () => (
       <div className="glass-card p-6 h-48 animate-pulse bg-white/5 flex flex-col justify-between">
@@ -284,7 +290,11 @@
       
       const [loginInput, setLoginInput] = useState(''); 
       const [loginPassword, setLoginPassword] = useState(''); 
+      
+      // --- إضافة حالة مفتاح الدولة الخاصة بإنشاء الحساب ---
+      const [regCountryCode, setRegCountryCode] = useState('963');
       const [registerData, setRegisterData] = useState({ name: '', whatsapp: '', area: '', password: '' });
+      
       const [loading, setLoading] = useState(false);
       const [toastMessage, setToastMessage] = useState('');
       const [dialog, setDialog] = useState({ isOpen: false, type: 'alert', message: '', onConfirm: null, inputType: 'password', inputPlaceholder: '' });
@@ -304,7 +314,11 @@
          { id: 'CAT-005', name_ar: 'اشتراكات برامج', name_en: 'Software Subscriptions', name_tr: 'Yazılım Abonelikleri', icon: 'ShieldCheck', color: 'green' },
          { id: 'CAT-006', name_ar: 'خدمات طلابية', name_en: 'Student Services', name_tr: 'Öğrenci Hizmetleri', icon: 'FileText', color: 'indigo' },
          { id: 'CAT-007', name_ar: 'فواتير', name_en: 'Invoices', name_tr: 'Faturalar', icon: 'Activity', color: 'yellow' },
-         { id: 'CAT-008', name_ar: 'شبكة إنترنت', name_en: 'Internet Network', name_tr: 'İnternet Ağı', icon: 'Headphones', color: 'blue' }
+         { id: 'CAT-008', name_ar: 'شبكة إنترنت', name_en: 'Internet Network', name_tr: 'İnternet Ağı', icon: 'Headphones', color: 'blue' },
+         { id: 'CAT-009', name_ar: 'خدمات سياحية', name_en: 'Tourism Services', name_tr: 'Turizm Hizmetleri', icon: 'Plane', color: 'cyan' },
+         { id: 'CAT-010', name_ar: 'بطاقات رقمية', name_en: 'Digital Cards', name_tr: 'Dijital Kartlar', icon: 'CreditCard', color: 'purple' },
+         { id: 'CAT-011', name_ar: 'تقنية عن بعد', name_en: 'Remote Tech', name_tr: 'Uzaktan Teknoloji', icon: 'Monitor', color: 'green' },
+         { id: 'CAT-012', name_ar: 'دورات تعليمية اونلاين', name_en: 'Online Courses', name_tr: 'Çevrimiçi Kurslar', icon: 'BookOpen', color: 'orange' }
       ];
       
       const [services, setServices] = useState([]);
@@ -356,6 +370,17 @@
           setDialog({ isOpen: true, type: 'prompt', message, onConfirm, inputType, inputPlaceholder });
       };
       const closeDialog = () => setDialog({ isOpen: false, type: 'alert', message: '', onConfirm: null });
+
+      // --- دالة تنسيق رقم الواتساب المحدثة ---
+      // هذه الدالة تتعامل بشكل ذكي مع الأرقام المحفوظة بالفعل مع مفتاح الدولة، وتقوم بتصحيح الأرقام السورية المكتوبة يدوياً.
+      const formatWhatsAppNumber = (number) => {
+          if (!number) return '';
+          let cleaned = number.toString().replace(/\D/g, ''); 
+          if (cleaned.startsWith('00')) cleaned = cleaned.substring(2);
+          if (cleaned.startsWith('0')) return '963' + cleaned.substring(1);
+          if (cleaned.length === 9 && !cleaned.startsWith('963')) return '963' + cleaned;
+          return cleaned; 
+      };
 
       // --- دالة نسخ النصوص للحافظة ---
       const handleCopyText = (text) => {
@@ -592,21 +617,25 @@
          }, 'password', 'أدخل الرمز السري لتأكيد المسح');
       };
 
-      // --- نظام التسجيل واستعادة الحساب المحدث ---
+      // --- نظام التسجيل واستعادة الحساب المحدث (مع مفتاح الدولة) ---
       const handleRegister = async (e) => {
         e.preventDefault(); setLoading(true);
         try {
-           const fakeEmail = `${registerData.whatsapp}@nexora.sy`;
+           // دمج مفتاح الدولة مع رقم الهاتف المكتوب (مع تنظيف الأصفار المبدئية)
+           let cleanPhone = registerData.whatsapp.replace(/\D/g, '').replace(/^0+/, '');
+           const finalFullPhone = regCountryCode + cleanPhone;
+           
+           const fakeEmail = `${finalFullPhone}@nexora.sy`;
            
            // إنشاء الحساب في Authentication
            const userCredential = await auth.createUserWithEmailAndPassword(fakeEmail, registerData.password);
            const firebaseUser = userCredential.user;
 
-           // التحقق من وجود العميل في Firestore
-           const existSnap = await db.collection('clients').where('whatsapp', '==', registerData.whatsapp).get();
+           // التحقق من وجود العميل في Firestore باستخدام الرقم الكامل
+           const existSnap = await db.collection('clients').where('whatsapp', '==', finalFullPhone).get();
            
            if (!existSnap.empty) { 
-               // --- سيناريو استعادة الحساب (عند قيام الإدارة بحذفه من Auth) ---
+               // --- سيناريو استعادة الحساب ---
                const oldDoc = existSnap.docs[0];
                const clientData = oldDoc.data();
                
@@ -620,12 +649,13 @@
                const newSerial = 'NEX-' + Math.floor(10000 + Math.random() * 90000);
                const newClient = { 
                    ...registerData, 
+                   whatsapp: finalFullPhone, // حفظ الرقم الكامل الشامل لمفتاح الدولة
                    serialId: newSerial, balance: 0, timestamp: Date.now(), 
                    dateString: new Date().toLocaleDateString('ar-SA'),
                    uid: firebaseUser.uid
                };
                
-               delete newClient.password; // عدم حفظ الباسورد إطلاقاً لدواعي الأمان
+               delete newClient.password; 
                await db.collection('clients').doc(newSerial).set(newClient);
                
                setUserData(newClient); 
@@ -648,11 +678,18 @@
 
       const handleLoginAction = async (e) => {
         e.preventDefault(); setLoading(true);
-        const fakeEmail = `${loginInput}@nexora.sy`;
+        
+        // معالجة ذكية للرقم المُدخل في خانة تسجيل الدخول ليتطابق مع ما تم حفظه
+        let processedLogin = loginInput.replace(/\D/g, '');
+        if (processedLogin.startsWith('00')) processedLogin = processedLogin.substring(2);
+        else if (processedLogin.startsWith('0')) processedLogin = '963' + processedLogin.substring(1);
+        else if (processedLogin.length === 9 && !processedLogin.startsWith('963')) processedLogin = '963' + processedLogin;
+
+        const fakeEmail = `${processedLogin}@nexora.sy`;
         
         try {
            await auth.signInWithEmailAndPassword(fakeEmail, loginPassword);
-           const waQuery = await db.collection('clients').where('whatsapp', '==', loginInput).get();
+           const waQuery = await db.collection('clients').where('whatsapp', '==', processedLogin).get();
            if (!waQuery.empty) {
                setUserData(waQuery.docs[0].data());
                changeView('mainHub'); setToastMessage('أهلاً بك مجدداً!');
@@ -663,7 +700,7 @@
         } catch (error) {
            if (error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
                try {
-                   const waQuery = await db.collection('clients').where('whatsapp', '==', loginInput).get();
+                   const waQuery = await db.collection('clients').where('whatsapp', '==', processedLogin).get();
                    let userDoc = null; if (!waQuery.empty) userDoc = waQuery.docs[0].data();
                    if (!userDoc) { showAlert('لم يتم العثور على حساب مرتبط بهذا الرقم.'); setLoading(false); return; }
                    
@@ -823,11 +860,9 @@
          const amount = parseFloat(giftAmounts[client.serialId]) || 0;
          if (amount <= 0) return showAlert('يرجى إدخال مبلغ صحيح للهدية.');
          
-         // 1. فتح محادثة الواتساب أولاً وبطريقة آمنة قبل تغيير حالة Loading لتجنب حظر المتصفح (Popup Blocker)
          const whatsappMessage = `مرحباً بك ${client.name} في منصة NEXORA SYRIA 🚀\n\nبصفتك عميلاً مميزاً، يسعدنا إخبارك أن إدارة المنصة قد أهدتك رصيداً مجانياً بقيمة ($${amount}) لتستمتع بتجربة خدماتنا الاحترافية.\n\nتذكر دائماً أن شحن رصيدك يمنحك مكافآت إضافية ضخمة!\nابدأ الاستكشاف الآن واستفد من العروض الحصرية 🎁.`;
-         const whatsappUrl = `https://wa.me/${client.whatsapp}?text=${encodeURIComponent(whatsappMessage)}`;
+         const whatsappUrl = `https://wa.me/${formatWhatsAppNumber(client.whatsapp)}?text=${encodeURIComponent(whatsappMessage)}`;
          
-         // إنشاء رابط وهمي والضغط عليه برمجياً لتخطي الحماية
          const link = document.createElement('a');
          link.href = whatsappUrl;
          link.target = '_blank';
@@ -835,10 +870,8 @@
          link.click();
          document.body.removeChild(link);
 
-         // الآن بعد أن فتحنا الواتساب بأمان، نقوم بتفعيل التحميل
          setLoading(true);
          try {
-             // 2. إرسال الرصيد وتحديث قاعدة البيانات
              await db.collection('clients').doc(client.serialId).update({
                  balance: firebase.firestore.FieldValue.increment(amount),
                  welcomeGiftSent: true
@@ -977,10 +1010,35 @@
         .btn-cyan { background: linear-gradient(135deg, #06b6d4, #3b82f6); box-shadow: 0 0 15px rgba(6, 182, 212, 0.4); border: none; color: white; }
         .btn-cyan:hover { box-shadow: 0 0 25px rgba(6, 182, 212, 0.6); transform: scale(1.02); }
         .scrollbar-hide::-webkit-scrollbar { display: none; } .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        /* التحديث الجديد لشريط الإعلانات: حركة بطيئة ومستمرة وبدون فراغات */
+        @keyframes tickerScrollSeamless { 
+            0% { transform: translateX(0); } 
+            100% { transform: translateX(-50%); } 
+        }
+        .ticker-animate { 
+            display: flex; 
+            width: max-content; 
+            animation: tickerScrollSeamless 40s linear infinite; 
+        }
+        .ticker-animate:hover { animation-play-state: paused; }
       `;
 
       const getIconComponent = (iconName, className) => {
-         switch(iconName) { case 'Code': return <CodeIcon className={className}/>; case 'Headphones': return <HeadphonesIcon className={className}/>; case 'FileText': return <FileTextIcon className={className}/>; case 'PenTool': return <PenToolIcon className={className}/>; case 'Megaphone': return <MegaphoneIcon className={className}/>; case 'ShieldCheck': return <ShieldCheckIcon className={className}/>; case 'Activity': return <ActivityIcon className={className}/>; default: return <ShoppingBagIcon className={className}/>; }
+         switch(iconName) { 
+            case 'Code': return <CodeIcon className={className}/>; 
+            case 'Headphones': return <HeadphonesIcon className={className}/>; 
+            case 'FileText': return <FileTextIcon className={className}/>; 
+            case 'PenTool': return <PenToolIcon className={className}/>; 
+            case 'Megaphone': return <MegaphoneIcon className={className}/>; 
+            case 'ShieldCheck': return <ShieldCheckIcon className={className}/>; 
+            case 'Activity': return <ActivityIcon className={className}/>; 
+            case 'Plane': return <PlaneIcon className={className}/>;
+            case 'CreditCard': return <CreditCardIcon className={className}/>;
+            case 'Monitor': return <MonitorIcon className={className}/>;
+            case 'BookOpen': return <BookOpenIcon className={className}/>;
+            default: return <ShoppingBagIcon className={className}/>; 
+         }
       };
 
       const getColorClasses = (colorName) => {
@@ -1037,7 +1095,6 @@
               <div className="relative"><UserIcon className={`absolute ${lang==='ar'?'right-4':'left-4'} top-4 w-5 h-5 text-gray-500`} /><input required type="text" placeholder={t('phoneNum')} className={`glass-input w-full rounded-xl py-3 ${lang==='ar'?'pr-12 pl-4':'pl-12 pr-4'} text-sm font-bold`} value={loginInput} onChange={e => setLoginInput(e.target.value)} /></div>
               <div className="relative"><LockIcon className={`absolute ${lang==='ar'?'right-4':'left-4'} top-4 w-5 h-5 text-gray-500`} /><input required type="password" placeholder={t('pass')} className={`glass-input w-full rounded-xl py-3 ${lang==='ar'?'pr-12 pl-4':'pl-12 pr-4'} text-sm font-bold`} value={loginPassword} onChange={e => setLoginPassword(e.target.value)} /></div>
               
-              {/* زر استعادة كلمة المرور */}
               <div className="flex justify-end mt-1">
                  <button type="button" onClick={() => showAlert('لاستعادة حسابك، يرجى التواصل مع إدارة المنصة وطلب "تصفير الأمان". بعد ذلك ستتمكن من عمل "إنشاء حساب جديد" بنفس رقمك وسيتم استعادة رصيدك وطلباتك تلقائياً.')} className="text-[#06b6d4] text-xs font-bold hover:underline transition-colors">نسيت كلمة المرور؟</button>
               </div>
@@ -1060,7 +1117,29 @@
             <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-2"><UserIcon className="w-6 h-6 text-[#06b6d4]"/> {t('createAcc')}</h2>
             <form onSubmit={handleRegister} className="space-y-4">
               <div className="relative"><UserIcon className={`absolute ${lang==='ar'?'right-4':'left-4'} top-4 w-5 h-5 text-gray-500`} /><input required type="text" placeholder={t('fullName')} className={`glass-input w-full rounded-xl py-3 ${lang==='ar'?'pr-12 pl-4':'pl-12 pr-4'} text-sm font-bold`} value={registerData.name} onChange={e => setRegisterData({...registerData, name: e.target.value})} /></div>
-              <div className="relative"><PhoneIcon className={`absolute ${lang==='ar'?'right-4':'left-4'} top-4 w-5 h-5 text-gray-500`} /><input required type="tel" placeholder={t('whatsapp')} className={`glass-input w-full rounded-xl py-3 ${lang==='ar'?'pr-12 pl-4':'pl-12 pr-4'} text-sm font-bold`} value={registerData.whatsapp} onChange={e => setRegisterData({...registerData, whatsapp: e.target.value})} /></div>
+              
+              {/* التحديث الجديد: دمج مفتاح الدولة مع رقم الهاتف */}
+              <div className="flex gap-2 relative">
+                <select className={`glass-input rounded-xl py-3 px-2 text-sm font-bold w-28 text-center`} value={regCountryCode} onChange={e => setRegCountryCode(e.target.value)} dir="ltr">
+                  <option value="963">+963 🇸🇾</option>
+                  <option value="971">+971 🇦🇪</option>
+                  <option value="966">+966 🇸🇦</option>
+                  <option value="962">+962 🇯🇴</option>
+                  <option value="961">+961 🇱🇧</option>
+                  <option value="964">+964 🇮🇶</option>
+                  <option value="965">+965 🇰🇼</option>
+                  <option value="974">+974 🇶🇦</option>
+                  <option value="968">+968 🇴🇲</option>
+                  <option value="973">+973 🇧🇭</option>
+                  <option value="20">+20 🇪🇬</option>
+                  <option value="90">+90 🇹🇷</option>
+                </select>
+                <div className="relative flex-1">
+                   <PhoneIcon className={`absolute ${lang==='ar'?'right-3':'left-3'} top-4 w-4 h-4 text-gray-500`} />
+                   <input required type="tel" placeholder="رقمك بدون صفر" className={`glass-input w-full rounded-xl py-3 ${lang==='ar'?'pr-9 pl-3':'pl-9 pr-3'} text-sm font-bold`} value={registerData.whatsapp} onChange={e => setRegisterData({...registerData, whatsapp: e.target.value})} dir="ltr" />
+                </div>
+              </div>
+
               <div className="relative"><MapPinIcon className={`absolute ${lang==='ar'?'right-4':'left-4'} top-4 w-5 h-5 text-gray-500`} /><input required type="text" placeholder={t('area')} className={`glass-input w-full rounded-xl py-3 ${lang==='ar'?'pr-12 pl-4':'pl-12 pr-4'} text-sm font-bold`} value={registerData.area} onChange={e => setRegisterData({...registerData, area: e.target.value})} /></div>
               <div className="relative"><LockIcon className={`absolute ${lang==='ar'?'right-4':'left-4'} top-4 w-5 h-5 text-gray-500`} /><input required type="password" placeholder={t('choosePass')} className={`glass-input w-full rounded-xl py-3 ${lang==='ar'?'pr-12 pl-4':'pl-12 pr-4'} text-sm font-bold`} value={registerData.password} onChange={e => setRegisterData({...registerData, password: e.target.value})} /></div>
               <button type="submit" disabled={loading} className="btn-cyan w-full rounded-xl py-3 text-lg font-bold mt-6">{t('regBtn')}</button>
@@ -1273,6 +1352,32 @@
                <p className="text-gray-400 font-bold tracking-wide border-t border-[#06b6d4]/30 pt-4 mx-auto w-fit text-lg">{t('explore')}</p>
             </div>
 
+            {/* التحديث الجديد لشريط الإعلانات: حركة بطيئة ومستمرة */}
+            {services.length > 0 && (
+               <div className="w-full bg-[#06b6d4]/5 border-y border-[#06b6d4]/30 py-4 mb-12 overflow-hidden relative shadow-[0_0_15px_rgba(6,182,212,0.1)] rounded-xl backdrop-blur-md" dir="ltr">
+                  <div className="absolute top-0 right-0 h-full w-20 bg-gradient-to-l from-[#050B14] to-transparent z-10 pointer-events-none"></div>
+                  <div className="absolute top-0 left-0 h-full w-20 bg-gradient-to-r from-[#050B14] to-transparent z-10 pointer-events-none"></div>
+                  <div className="ticker-animate text-sm font-bold">
+                      <div className="flex" dir="rtl">
+                          {[...services].sort((a,b)=>{ const tA=(a.createdAt && a.createdAt.seconds)||0; const tB=(b.createdAt && b.createdAt.seconds)||0; return tB-tA; }).slice(0, 10).map((s, i) => (
+                              <span key={i} className="text-emerald-400 mx-8 flex items-center gap-2 whitespace-nowrap">
+                                  <ActivityIcon className="w-5 h-5 text-[#06b6d4]" />
+                                  أحدث إضافاتنا: <span className="text-white text-base mx-1">{s[`name_${lang}`] || s.name_ar}</span> بسعر <span dir="ltr" className="text-yellow-400">${s.price}</span>
+                              </span>
+                          ))}
+                      </div>
+                      <div className="flex" dir="rtl">
+                          {[...services].sort((a,b)=>{ const tA=(a.createdAt && a.createdAt.seconds)||0; const tB=(b.createdAt && b.createdAt.seconds)||0; return tB-tA; }).slice(0, 10).map((s, i) => (
+                              <span key={i + 'clone'} className="text-emerald-400 mx-8 flex items-center gap-2 whitespace-nowrap">
+                                  <ActivityIcon className="w-5 h-5 text-[#06b6d4]" />
+                                  أحدث إضافاتنا: <span className="text-white text-base mx-1">{s[`name_${lang}`] || s.name_ar}</span> بسعر <span dir="ltr" className="text-yellow-400">${s.price}</span>
+                              </span>
+                          ))}
+                      </div>
+                  </div>
+               </div>
+            )}
+
             <div id="services-section" className="mb-12">
                <h3 className={`text-2xl font-black text-white mb-6 border-${lang==='ar'?'r':'l'}-4 border-[#06b6d4] p${lang==='ar'?'r':'l'}-4`}>{t('servicesCats')}</h3>
                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-16">
@@ -1474,7 +1579,7 @@
                   <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2"><EditIcon className="w-6 h-6 text-[#06b6d4]"/> تحديث بيانات العميل</h3>
                   <form onSubmit={handleUpdateClientData} className="space-y-4">
                      <div><label className="text-xs text-gray-400 font-bold mb-1 block">الاسم الكامل</label><input required type="text" className="glass-input w-full rounded-xl py-3 px-4 text-sm font-bold" value={editingClient.name} onChange={e => setEditingClient({...editingClient, name: e.target.value})} /></div>
-                     <div><label className="text-xs text-gray-400 font-bold mb-1 block">رقم الواتساب</label><input required type="text" className="glass-input w-full rounded-xl py-3 px-4 text-sm font-bold" value={editingClient.whatsapp} onChange={e => setEditingClient({...editingClient, whatsapp: e.target.value})} /></div>
+                     <div><label className="text-xs text-gray-400 font-bold mb-1 block">رقم الواتساب (بالصيغة الدولية)</label><input required type="text" className="glass-input w-full rounded-xl py-3 px-4 text-sm font-bold" value={editingClient.whatsapp} onChange={e => setEditingClient({...editingClient, whatsapp: e.target.value})} dir="ltr" /></div>
                      <div><label className="text-xs text-gray-400 font-bold mb-1 block">المنطقة</label><input required type="text" className="glass-input w-full rounded-xl py-3 px-4 text-sm font-bold" value={editingClient.area} onChange={e => setEditingClient({...editingClient, area: e.target.value})} /></div>
                      <div><label className="text-xs text-emerald-400 font-bold mb-1 block">رصيد المحفظة ($ USD)</label><input required type="number" step="0.01" className="glass-input w-full rounded-xl py-3 px-4 text-sm font-black text-emerald-400" value={editingClient.balance} onChange={e => setEditingClient({...editingClient, balance: e.target.value})} /></div>
                      <div className="flex gap-2 mt-6">
@@ -1528,7 +1633,7 @@
                            <tr key={client.id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
                               <td className="p-4 font-mono text-[#06b6d4] font-bold">{client.serialId}</td>
                               <td className="p-4 font-bold text-white">{client.name}</td>
-                              <td className="p-4"><a href={`https://wa.me/${client.whatsapp}`} target="_blank" className="text-green-400 hover:underline font-bold" dir="ltr">{client.whatsapp}</a></td>
+                              <td className="p-4"><a href={`https://wa.me/${formatWhatsAppNumber(client.whatsapp)}`} target="_blank" className="text-green-400 hover:underline font-bold" dir="ltr">{client.whatsapp}</a></td>
                               <td className="p-4 font-bold">{client.area}</td>
                               <td className="p-4 font-black text-emerald-400" dir="ltr">${(parseFloat(client.balance) || 0).toFixed(2)}</td>
                               <td className="p-4 text-center">
@@ -1619,7 +1724,7 @@
                         </div>
                         <div className="bg-black/30 p-4 rounded-xl mb-4 border border-white/5 grid grid-cols-1 sm:grid-cols-3 gap-3">
                            <p className="text-sm font-bold text-white"><UserIcon className="w-4 h-4 inline text-gray-400 mx-2"/>{task.clientName}</p>
-                           <a href={`https://wa.me/${task.clientWhatsapp}`} target="_blank" className="text-sm font-bold text-green-400 hover:underline" dir="ltr"><PhoneIcon className="w-4 h-4 inline mx-2"/>{task.clientWhatsapp}</a>
+                           <a href={`https://wa.me/${formatWhatsAppNumber(task.clientWhatsapp)}`} target="_blank" className="text-sm font-bold text-green-400 hover:underline" dir="ltr"><PhoneIcon className="w-4 h-4 inline mx-2"/>{task.clientWhatsapp}</a>
                         </div>
                         <h3 className={`text-lg font-black mb-2 ${isTopup ? 'text-emerald-400' : 'text-white'}`}>{task.type}</h3>
                         <p className="text-sm text-gray-400 whitespace-pre-wrap leading-relaxed">{task.details}</p>
